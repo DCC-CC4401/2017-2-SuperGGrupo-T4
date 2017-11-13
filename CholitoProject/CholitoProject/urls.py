@@ -14,8 +14,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url, include
-from django.contrib import admin
 from django.conf.urls.static import static
+from django.contrib import admin
+
 from CholitoProject import settings
 from CholitoProject.views import AuthView, LogOutView
 
@@ -25,6 +26,7 @@ urlpatterns = [
     url(r'^auth/', AuthView.as_view(), name='auth'),
     url(r'^logout/', LogOutView.as_view(), name='logout'),
     url(r'^municipality/', include('municipality.urls')),
+    url(r'^ong/', include('ong.urls')),
     url(r'^animal/', include('animals.urls')),
     url(r'', include('naturalUser.urls')),
 ]

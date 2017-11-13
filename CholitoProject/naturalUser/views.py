@@ -1,14 +1,16 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
-from django.shortcuts import render, redirect
+from django.http import HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.views.generic import TemplateView
 
 from CholitoProject.userManager import get_user_index
 from complaint.models import AnimalType
 from naturalUser.forms import SignUpForm, AvatarForm
-from naturalUser.models import NaturalUser
+from naturalUser.models import NaturalUser, ONGLike
+from ong.models import ONG
 
 
 class IndexView(TemplateView):
@@ -93,3 +95,14 @@ class OngOutViewTemplate(TemplateView):
 
     def get(self, request, **kwargs):
         return render(request, self.template_name)
+
+
+class ONGFavView(View):
+    def get(self, request, **kwargs):
+        c_user = get_user_index(request.user)
+        ong = get_object_or_404(ONG, pk=request.GET.get('id'))
+        ONGLike.objects.get_or_create(natural_user=c_user, ong=ong)
+
+        number_of_likes = ONGLike.objects.filter(ong=ong).distinct().count()
+
+        return HttpResponse(number_of_likes)

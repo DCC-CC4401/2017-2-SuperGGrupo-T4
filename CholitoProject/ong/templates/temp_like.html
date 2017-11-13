@@ -1,0 +1,31 @@
+{% extends "User/user-standard.html" %}
+
+{% block title %}{{ ong.name }}{% endblock %}
+
+{% block content-header %}{{ ong.name }}{% endblock %}
+
+{% block content %}
+    <p>nombre: {{ ong.name }}</p>
+    <p>
+        likes:
+    <div id="n-likes"> {{ likes }}</div>
+    </p>
+
+    <button id="like" data-id="{{ ong.pk }}" class="btn btn-mini btn-primary"
+            type="button">
+        Like
+    </button>
+
+    <script>
+        $('#like').click(function () {
+            var ong_id = $(this).attr("data-id");
+            var likes = {{ likes }}
+            $.get('{% url 'fav-ong' %}', {id: ong_id, likes: likes}, function (data) {
+                $('#like').hide();
+                $('#n-likes').html(data);
+                alert("ok");
+            });
+        });
+    </script>
+
+{% endblock %}

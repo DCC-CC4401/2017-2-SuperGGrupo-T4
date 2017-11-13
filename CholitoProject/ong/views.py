@@ -17,5 +17,7 @@ class ONGNaturalView(View):
         self.context['ong'] = ong
         number_of_likes = ONGLike.objects.filter(ong=ong).distinct().count()
         self.context['likes'] = number_of_likes
+        liked = ONGLike.objects.filter(natural_user=c_user, ong=ong).exists()
+        self.context['liked'] = liked
 
         return render(request, self.template_name, context=self.context)

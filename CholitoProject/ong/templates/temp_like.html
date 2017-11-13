@@ -11,20 +11,21 @@
     <div id="n-likes"> {{ likes }}</div>
     </p>
 
-    <button id="like" data-id="{{ ong.pk }}" class="btn btn-mini btn-primary"
-            type="button">
-        Like
-    </button>
+    {% if not liked %}
+        <button id="like" data-id="{{ ong.pk }}" class="btn btn-mini btn-primary"
+                type="button">
+            Like
+        </button>
+    {% endif %}
 
     <script>
         $('#like').click(function () {
             var ong_id = $(this).attr("data-id");
             var likes = {{ likes }}
-            $.get('{% url 'fav-ong' %}', {id: ong_id, likes: likes}, function (data) {
-                $('#like').hide();
-                $('#n-likes').html(data);
-                alert("ok");
-            });
+                $.get('{% url 'fav-ong' %}', {id: ong_id, likes: likes}, function (data) {
+                    $('#like').hide();
+                    $('#n-likes').html(data);
+                });
         });
     </script>
 

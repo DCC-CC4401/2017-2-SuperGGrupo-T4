@@ -2,6 +2,7 @@ from django.db import models
 
 from complaint.models import Complaint, AnimalType
 from naturalUser.models import NaturalUser
+from ong.models import ONG
 
 
 class AnimalImage(models.Model):
@@ -22,8 +23,9 @@ class Animal(models.Model):
     color = models.TextField(max_length=50)
     estimated_age = models.PositiveSmallIntegerField()
     days_in_adoption = models.IntegerField()
+    # TODO: delete when ong is deleted?
+    ong = models.ForeignKey(ONG)
 
-    # TODO: for now
     def __str__(self):
         return self.name + " - " + self.animal_type.name
 

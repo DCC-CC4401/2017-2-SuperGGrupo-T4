@@ -32,7 +32,8 @@ class ComplaintSendView(View):
             complaint.save()
             if image_form.is_valid():
                 ComplaintImage.objects.create(
-                    complaint=complaint, image=image_form.cleaned_data.get('complaint_image'))
+                    complaint=complaint,
+                    image=image_form.cleaned_data.get('complaint_image'))
 
         return redirect('/')
 

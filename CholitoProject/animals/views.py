@@ -17,10 +17,9 @@ class AnimalRenderView(View):
         self.context['c_user'] = c_user
 
         animal = get_object_or_404(Animal, pk=pk)
-        adopt_users_pk = Adopt.objects.filter(animal=animal).values('user')
-        adopt_users = list(NaturalUser.objects.filter(pk__in=adopt_users_pk))
+        adopt_users_pk = [adopt.user.pk for adopt in Adopt.objects.filter(animal=animal)]
         self.context['selected_animal'] = animal
-        self.context['adopters'] = adopt_users
+        self.context['is_adopter'] = c_user.pk in adopt_users_pk
         self.context['images'] = AnimalImage.objects.filter(animal=animal)
         return render(request, self.template_name, context=self.context)
 
@@ -30,9 +29,4 @@ class AdoptView(View):
         c_user = get_user_index(request.user)
         animal = get_object_or_404(Animal, pk=request.GET.get('id'))
         Adopt.objects.get_or_create(user=c_user, animal=animal)
-
-        adopt_users_pk = Adopt.objects.filter(animal=animal).values('user')
-        adopt_users = ["<p>" + user.user.first_name + " " + user.user.last_name + "</p>" for user in
-                       NaturalUser.objects.filter(pk__in=adopt_users_pk)]
-
-        return HttpResponse(adopt_users)
+        return HttpResponse("")

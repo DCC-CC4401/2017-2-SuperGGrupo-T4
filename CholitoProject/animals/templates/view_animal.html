@@ -56,34 +56,35 @@
 
     <br><br>
     {% if user.is_authenticated %}
-        {% if c_user in adopters %}
-            <p>Has seleccionado adoptar este animal :)</p>
-        {% else %}
-            <button id="adopt" data-id="{{ selected_animal.pk }}" class="btn btn-mini btn-primary"
+
+            <div id="adopted" class="adopt">
+                <p>Has seleccionado adoptar este animal :)</p>
+            </div>
+
+            <button id="adopt" data-id="{{ selected_animal.pk }}" class="btn btn-mini btn-primary adopt"
                     type="button">
                 ¡Adoptame!
             </button>
-        {% endif %}
+
     {% endif %}
-
-    <p>Los siguientes usuarios han seleccionado adoptar:</p>
-    <div id="the_adopters">
-        {% if adopters %}
-            {% for user in adopters %}
-                <p>{{ user.user.first_name }} {{ user.user.last_name }}</p>
-            {% endfor %}
-        {% endif %}
-
-    </div>
 
     <script>
         $('#adopt').click(function () {
             var animal_id = $(this).attr("data-id");
-            $.get('{% url 'adopt' %}', {id: animal_id}, function (data) {
-                $('#the_adopters').html(data);
+            $.get('{% url 'adopt' %}', {id: animal_id}, function () {
                 $('#adopt').hide();
+                $('#adopted').show();
                 alert("Hemos enviado tu información a la ONG correspondiente!");
             });
+        });
+
+        $(document).ready(function () {
+            $('.adopt').hide();
+            if ("{{ is_adopter }}" === "True") {
+                $('#adopted').show();
+            } else {
+                $('#adopt').show();
+            }
         });
     </script>
 

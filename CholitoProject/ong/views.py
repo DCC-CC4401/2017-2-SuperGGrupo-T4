@@ -1,8 +1,7 @@
-from django.shortcuts import render, get_object_or_404
-from django.views import View
-
 from CholitoProject.userManager import get_user_index
 from complaint.models import AnimalType
+from django.shortcuts import render, get_object_or_404
+from django.views import View
 from naturalUser.models import ONGLike
 from ong.models import ONG
 
@@ -22,3 +21,6 @@ class ONGNaturalView(View):
         self.context['liked'] = liked
 
         return render(request, self.template_name, context=self.context)
+
+      
+# TODO: use adopt.animal.ong == this_ong to load a notification tab with pending adoptions

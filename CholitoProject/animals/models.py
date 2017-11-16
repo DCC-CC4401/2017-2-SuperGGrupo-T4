@@ -22,7 +22,7 @@ class Animal(models.Model):
     animal_type = models.ForeignKey(AnimalType)
     color = models.TextField(max_length=50)
     estimated_age = models.PositiveSmallIntegerField()
-    days_in_adoption = models.IntegerField()
+    admission_date = models.DateTimeField(auto_now_add = True)
     # TODO: delete when ong is deleted?
     ong = models.ForeignKey(ONG)
 

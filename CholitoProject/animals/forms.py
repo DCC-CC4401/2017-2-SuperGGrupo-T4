@@ -13,9 +13,9 @@ class ComplaintForm(forms.ModelForm):
             'animal_type',
             'color',
             'estimated_age',
-            'days_in_adoption',
             'description',
             'from_complaint',
+            'admission_date',
         )
 
     def __init__(self, *args, **kwargs):

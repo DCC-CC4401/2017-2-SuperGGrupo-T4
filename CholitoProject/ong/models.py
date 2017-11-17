@@ -3,6 +3,7 @@ from django.db import models
 from django.shortcuts import redirect
 
 
+# TODO: add number of favourites
 class ONG(models.Model):
     name = models.TextField(max_length=200)
     lat = models.DecimalField(max_digits=9, decimal_places=6)

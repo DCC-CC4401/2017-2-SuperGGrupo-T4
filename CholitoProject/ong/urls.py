@@ -1,9 +1,8 @@
-from django.conf.urls import include, url
+from django.conf.urls import url
 
-from django.conf import settings
-
-from ong.views import ONGNaturalView
+from ong.views import ONGNaturalView, ONGIndexView
 
 urlpatterns = [
     url(r'^(?P<pk>\d+)/$', ONGNaturalView.as_view(), name='see-natural-ong'),
+    url(r'^$', ONGIndexView.as_view(), name='ong-index'),
 ]

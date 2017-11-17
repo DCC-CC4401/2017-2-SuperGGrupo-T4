@@ -6,5 +6,20 @@
 </head>
 <body>
 
+
+<table>
+    <tr>
+        <th>name</th>
+        <th>total</th>
+    </tr>
+    {% for animal in animals %}
+        <tr>
+            <td>{{ animal.name }}</td>
+            <td>{{ animal.total }}</td>
+        </tr>
+    {% endfor %}
+</table>
+
+
 </body>
 </html>

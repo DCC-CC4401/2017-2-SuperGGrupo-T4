@@ -16,11 +16,12 @@ class ONG(models.Model):
         return self.name
 
 
-class ONGUser(User):
+class ONGUser(models.Model):
+    user = models.OneToOneField(User)
     ong = models.ForeignKey('ONG')
 
     def __str__(self):
-        return self.municipality.name + " User"
+        return self.ong.name + " User"
 
     def get_index(self, request, context):
         return redirect('/ong/')

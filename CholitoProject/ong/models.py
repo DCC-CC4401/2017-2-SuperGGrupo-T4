@@ -26,7 +26,6 @@ class ONGUser(models.Model):
     def get_index(self, request, context):
         return redirect('/ong/')
 
-    # TODO: add permission
     def save(self, *args, **kwargs):
         super(ONGUser, self).save(*args, **kwargs)
         if not self.user.has_perm('ong_user_access'):

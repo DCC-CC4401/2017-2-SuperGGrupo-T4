@@ -29,7 +29,7 @@ class ONGNaturalView(View):
 
 class ONGIndexView(PermissionRequiredMixin, LoginRequiredMixin, View):
     permission_required = 'ong.ong_user_access'
-    template_name = 'ong_for_adoption.html'
+    template_name = 'ong_for_adoption_main.html'
     context = {}
 
     def get(self, request, **kwargs):

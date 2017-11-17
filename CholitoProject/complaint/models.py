@@ -38,16 +38,18 @@ class Complaint(models.Model):
         (False, "No"),
     )
 
-    description = models.TextField(max_length=1000)
+    description = models.TextField(max_length=1000, blank=True)
     case = models.SmallIntegerField(choices=COMPLAINT_OPTIONS)
     lat = models.DecimalField(max_digits=9, decimal_places=6, null=True)
     lng = models.DecimalField(max_digits=9, decimal_places=6, null=True)
     directions = models.TextField(max_length=200, null=True)
     status = models.SmallIntegerField(choices=COMPLAINT_STATUS)
     animal_type = models.ForeignKey(AnimalType)
-    gender = models.SmallIntegerField(choices=GENDER_OPTIONS)
-    wounded = models.BooleanField(choices=WOUND_OPTIONS)
-    color = models.TextField(max_length=50)
+    gender = models.SmallIntegerField(choices=GENDER_OPTIONS, blank=True, null=True)
+    wounded = models.NullBooleanField(choices=WOUND_OPTIONS, blank=True, default=None)
+    color = models.TextField(max_length=50, blank=True)
+
+    # TODO: required?
     municipality = models.ForeignKey(Municipality)
 
     def __str__(self):
@@ -55,5 +57,5 @@ class Complaint(models.Model):
 
 
 class ComplaintImage(models.Model):
-    image = models.ImageField(upload_to='complaints/')
+    image = models.ImageField(upload_to='complaints/', blank=True)
     complaint = models.ForeignKey('Complaint', on_delete=models.CASCADE)

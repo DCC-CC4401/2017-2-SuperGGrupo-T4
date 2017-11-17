@@ -10,6 +10,8 @@ from naturalUser.models import ONGLike
 from ong.models import ONG
 
 
+# TODO: use adopt.animal.ong == this_ong to load a notification tab with pending adoptions
+
 class ONGNaturalView(View):
     template_name = 'temp_like.html'
     context = {'animals': AnimalType.objects.all()}
@@ -44,7 +46,26 @@ class ONGIndexView(PermissionRequiredMixin, LoginRequiredMixin, View):
             [user.ong.id])
 
         self.context['animals'] = animals
+        self.context['c_user'] = user
 
         return render(request, self.template_name, context=self.context)
 
-# TODO: use adopt.animal.ong == this_ong to load a notification tab with pending adoptions
+
+class ONGAdoptedView(PermissionRequiredMixin, LoginRequiredMixin, View):
+    permission_required = 'ong.ong_user_access'
+    pass
+
+
+class ONGStatisticsView(PermissionRequiredMixin, LoginRequiredMixin, View):
+    permission_required = 'ong.ong_user_access'
+    pass
+
+
+class ONGEditView(PermissionRequiredMixin, LoginRequiredMixin, View):
+    permission_required = 'ong.ong_user_access'
+    pass
+
+
+class ONGAddAnimalView(PermissionRequiredMixin, LoginRequiredMixin, View):
+    permission_required = 'ong.ong_user_access'
+    pass

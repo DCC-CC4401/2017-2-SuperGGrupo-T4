@@ -2,12 +2,15 @@ from django.contrib.auth.mixins import PermissionRequiredMixin, \
     LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
+from django.utils import timezone
 
 from CholitoProject.userManager import get_user_index
 from animals.models import Animal
 from complaint.models import AnimalType
 from naturalUser.models import ONGLike, NaturalUser
 from ong.models import ONG
+from animals.models import Animal, Adopt, AnimalImage
+
 
 
 # TODO: use adopt.animal.ong == this_ong to load a notification tab with pending adoptions
@@ -90,3 +93,35 @@ class ONGRequestsView(PermissionRequiredMixin, LoginRequiredMixin, View):
         self.context['users'] = requests
 
         return render(request, self.template_name, context=self.context)
+
+class ONGEditAnimalView(PermissionRequiredMixin, LoginRequiredMixin, View):
+    permission_required = 'ong.ong_user_access'
+    template_name = 'edit_animal.html'
+    context = {'animals': AnimalType.objects.all()}
+
+    def get(self, request, pk, **kwargs):
+        c_user = get_user_index(request.user)
+        self.context['c_user'] = c_user
+
+        animal = get_object_or_404(Animal, pk=pk)
+        self.context['selected_animal'] = animal
+        self.context['images'] = AnimalImage.objects.filter(animal=animal)
+        self.context['adoptions_days'] = (timezone.now() - animal.admission_date).days
+        return render(request, self.template_name, context=self.context)
+
+class ONGEditSterilizedStateView(PermissionRequiredMixin, LoginRequiredMixin, View):
+    permission_required = 'ong.ong_user_access'
+    template_name = 'edit_animal.html'
+    context = {'animals': AnimalType.objects.all()}
+
+    def post(self, request, pk, **kwargs):
+        c_user = get_user_index(request.user)
+        self.context['c_user'] = c_user
+        animal = get_object_or_404(Animal, pk=pk)
+        animal.is_sterilized = request.POST['status']
+        animal.save()
+        self.context['selected_animal'] = animal
+        self.context['images'] = AnimalImage.objects.filter(animal=animal)
+        self.context['adoptions_days'] = (timezone.now() - animal.admission_date).days
+
+        return redirect('edit-animal', pk=pk)

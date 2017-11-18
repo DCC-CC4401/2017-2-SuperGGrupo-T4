@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin, \
     LoginRequiredMixin
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 
 from CholitoProject.userManager import get_user_index
@@ -63,7 +63,13 @@ class ONGStatisticsView(PermissionRequiredMixin, LoginRequiredMixin, View):
 
 class ONGEditView(PermissionRequiredMixin, LoginRequiredMixin, View):
     permission_required = 'ong.ong_user_access'
-    pass
+
+    def post(self, request, **kwargs):
+        c_user = get_user_index(request.user)
+        if 'avatar' in request.FILES:
+            c_user.ong.avatar = request.FILES['avatar']
+            c_user.ong.save()
+        return redirect('/')
 
 
 class ONGAddAnimalView(PermissionRequiredMixin, LoginRequiredMixin, View):

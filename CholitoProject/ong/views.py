@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin, \
     LoginRequiredMixin
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.utils import timezone
@@ -16,7 +17,7 @@ from animals.models import Animal, Adopt, AnimalImage
 # TODO: use adopt.animal.ong == this_ong to load a notification tab with pending adoptions
 
 class ONGNaturalView(View):
-    template_name = 'temp_like.html'
+    template_name = 'natural_user_ong.html'
     context = {'animals': AnimalType.objects.all()}
 
     def get(self, request, pk, **kwargs):
@@ -24,10 +25,10 @@ class ONGNaturalView(View):
         self.context['c_user'] = c_user
         ong = get_object_or_404(ONG, pk=pk)
         self.context['ong'] = ong
-        number_of_likes = ONGLike.objects.filter(ong=ong).distinct().count()
-        self.context['likes'] = number_of_likes
         liked = ONGLike.objects.filter(natural_user=c_user, ong=ong).exists()
         self.context['liked'] = liked
+        animals = Animal.objects.filter(ong_id=pk)
+        self.context['ong_animals'] = animals
 
         return render(request, self.template_name, context=self.context)
 
@@ -93,7 +94,24 @@ class ONGRequestsView(PermissionRequiredMixin, LoginRequiredMixin, View):
         self.context['users'] = requests
 
         return render(request, self.template_name, context=self.context)
+      
 
+class ONGFavView(View):
+    def get(self, request, **kwargs):
+        c_user = get_user_index(request.user)
+        ong = get_object_or_404(ONG, pk=request.GET.get('id'))
+        number_of_likes = ong.favourites
+        _, created = ONGLike.objects.get_or_create(natural_user=c_user,
+                                                   ong=ong)
+        if created:
+            number_of_likes = ONGLike.objects.filter(
+                ong=ong).distinct().count()
+            ong.favourites = number_of_likes
+            ong.save()
+
+        return HttpResponse(number_of_likes)
+
+      
 class ONGEditAnimalView(PermissionRequiredMixin, LoginRequiredMixin, View):
     permission_required = 'ong.ong_user_access'
     template_name = 'edit_animal.html'
@@ -109,6 +127,7 @@ class ONGEditAnimalView(PermissionRequiredMixin, LoginRequiredMixin, View):
         self.context['adoptions_days'] = (timezone.now() - animal.admission_date).days
         return render(request, self.template_name, context=self.context)
 
+      
 class ONGEditSterilizedStateView(PermissionRequiredMixin, LoginRequiredMixin, View):
     permission_required = 'ong.ong_user_access'
     template_name = 'edit_animal.html'

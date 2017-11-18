@@ -25,22 +25,24 @@
         </div>
     </div>
 
-    <script>
-        $('#like-button').click(function () {
-            var ong_id = $(this).attr("data-id");
-            var button = document.getElementById("like-button");
-            if (!button.classList.contains('liked')) {
-                $.get('{% url 'fav-ong' %}', {id: ong_id}, function (data) {
-                    $('#fav-number').html(data);
-                });
-                button.classList.remove('fa-star-o');
-                button.classList.remove('c-star--empty');
-                button.classList.add('fa-star');
-                button.classList.add('c-star');
-                button.classList.add('liked');
-            }
-        });
-    </script>
+    {% if user.is_authenticated %}
+        <script>
+            $('#like-button').click(function () {
+                var ong_id = $(this).attr("data-id");
+                var button = document.getElementById("like-button");
+                if (!button.classList.contains('liked')) {
+                    $.get('{% url 'fav-ong' %}', {id: ong_id}, function (data) {
+                        $('#fav-number').html(data);
+                    });
+                    button.classList.remove('fa-star-o');
+                    button.classList.remove('c-star--empty');
+                    button.classList.add('fa-star');
+                    button.classList.add('c-star');
+                    button.classList.add('liked');
+                }
+            });
+        </script>
+    {% endif %}
 {% endblock %}
 
 {% block content %}

@@ -25,7 +25,7 @@ class ONGNaturalView(View):
         self.context['ong'] = ong
         liked = ONGLike.objects.filter(natural_user=c_user, ong=ong).exists()
         self.context['liked'] = liked
-        animals = Animal.objects.filter(ong_id=pk)
+        animals = Animal.objects.filter(ong_id=pk, adoption_state=1)
         self.context['ong_animals'] = animals
 
         return render(request, self.template_name, context=self.context)

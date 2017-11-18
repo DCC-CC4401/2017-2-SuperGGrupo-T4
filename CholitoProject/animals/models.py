@@ -1,8 +1,10 @@
 from django.db import models
-
 from complaint.models import Complaint, AnimalType
 from naturalUser.models import NaturalUser
 from ong.models import ONG
+
+def default_avatar():
+    return 'animals/animal-default.jpg'
 
 
 class AnimalImage(models.Model):
@@ -38,8 +40,8 @@ class Animal(models.Model):
     admission_date = models.DateTimeField(auto_now_add = True)
     adoption_state = models.SmallIntegerField(choices=ADOPTION_OPTIONS, blank=1, null=1)
     is_sterilized = models.NullBooleanField(choices=STERILIZED_OPTIONS, blank=False, null=False)
-    # TODO: delete when ong is deleted?
-    ong = models.ForeignKey(ONG)
+    ong = models.ForeignKey(ONG, on_delete=models.CASCADE)
+    avatar = models.ImageField(default = default_avatar, upload_to="animals/")
 
     def __str__(self):
         return self.name + " - " + self.animal_type.name

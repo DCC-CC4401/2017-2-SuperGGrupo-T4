@@ -21,8 +21,8 @@ class Animal(models.Model):
     )
 
     ADOPTION_OPTIONS = (
-        (1, "En adopcion"),
-        (2, "Procesando Solicitud Adopcion"),
+        (1, "En adopción"),
+        (2, "Procesando Solicitud Adopción"),
         (3, "Adoptado"),
     )
 

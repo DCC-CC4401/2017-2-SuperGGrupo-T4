@@ -1,16 +1,15 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
-from django.http import HttpResponse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.mixins import PermissionRequiredMixin, \
+    LoginRequiredMixin
+from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import TemplateView
 
 from CholitoProject.userManager import get_user_index
 from complaint.models import AnimalType
 from naturalUser.forms import SignUpForm, AvatarForm
-from naturalUser.models import NaturalUser, ONGLike
-from ong.models import ONG
+from naturalUser.models import NaturalUser
 
 
 class IndexView(TemplateView):
@@ -52,8 +51,13 @@ class SignUpView(View):
         if user_form.is_valid() and avatar_form.is_valid():
             user_ = user_form.save()
             user_.refresh_from_db()
-            natural_user = NaturalUser.objects.create(
-                user=user_, avatar=avatar_form.cleaned_data.get('avatar'))
+            avatar_ = avatar_form.cleaned_data.get('avatar')
+            if avatar_ is None:
+                natural_user = NaturalUser.objects.create(
+                    user=user_)
+            else:
+                natural_user = NaturalUser.objects.create(
+                    user=user_, avatar=avatar_)
             username = user_form.cleaned_data.get('email')
             raw_password = user_form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
@@ -75,37 +79,3 @@ class UserDetail(PermissionRequiredMixin, LoginRequiredMixin, View):
             c_user.avatar = request.FILES['avatar']
         c_user.save()
         return redirect('/')
-
-
-class OngInViewTemplate(PermissionRequiredMixin, LoginRequiredMixin, TemplateView):
-    permission_required = 'naturalUser.natural_user_access'
-    template_name = 'usuario-in-ong.html'
-    context = {}
-
-    def get(self, request, **kwargs):
-        c_user = get_user_index(request.user)
-        self.context['c_user'] = c_user
-        animals = AnimalType.objects.all()
-        self.context['animals'] = animals
-        return render(request, self.template_name, context=self.context)
-
-
-class OngOutViewTemplate(TemplateView):
-    template_name = 'usuario-out-ong.html'
-
-    def get(self, request, **kwargs):
-        return render(request, self.template_name)
-
-
-class ONGFavView(View):
-    def get(self, request, **kwargs):
-        c_user = get_user_index(request.user)
-        ong = get_object_or_404(ONG, pk=request.GET.get('id'))
-        number_of_likes = ong.favourites
-        _, created = ONGLike.objects.get_or_create(natural_user=c_user, ong=ong)
-        if created:
-            number_of_likes = ONGLike.objects.filter(ong=ong).distinct().count()
-            ong.favourites = number_of_likes
-            ong.save()
-
-        return HttpResponse(number_of_likes)

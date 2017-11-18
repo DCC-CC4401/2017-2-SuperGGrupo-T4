@@ -5,6 +5,9 @@
 
 {% block content %}
 
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
+
     <div class="row hidden-xs hidden-sm">
         <div class="col-lg-12">
             <div class="box">
@@ -12,7 +15,7 @@
                     <div class="c-box__body__header">
                         <a href="{% url 'add-animal' %}" class="btn btn-success">Agregar</a>
                     </div>
-                    <table id="example2" class="table table-bordered table-hover">
+                    <table id="animal-table" class="table table-bordered table-hover">
                         <thead>
                         <tr>
                             <th>Foto</th>
@@ -20,6 +23,7 @@
                             <th>Tipo</th>
                             <th>Sexo</th>
                             <th>Solicitudes</th>
+                            <th>Estado</th>
                             <th></th>
                         </tr>
                         </thead>
@@ -27,12 +31,13 @@
                         {% for animal in animals %}
                             <tr>
                                 <td style="vertical-align:middle;">
-                                    <img src="{{ animal.image.url }}" width="35">
+                                    <img src="{{ animal.avatar.url }}" width="35">
                                 </td>
                                 <td style="vertical-align:middle;">{{ animal.name }}</td>
                                 <td style="vertical-align:middle;">{{ animal.animal_type }}</td>
                                 <td style="vertical-align:middle;">{{ animal.get_gender_display }}</td>
-                                <td><a href="{% url 'see-requests' animal.id %}"> {{ animal.total }}</a></td>
+                                <td style="vertical-align:middle;"><a href="{% url 'see-requests' animal.id %}"> {{ animal.total }}</a></td>
+                                <td style="vertical-align:middle;">{{ animal.get_adoption_state_display }}</td>
                                 <td style="text-align:right;vertical-align:middle;">
                                     <!-- TODO: maybe other view? -->
                                     <a href="{% url 'see-animal' animal.id %}" type="button"
@@ -41,8 +46,8 @@
                                         &nbsp; Ver
                                     </a>
                                     &nbsp;&nbsp;
-                                    <!-- TODO: why 2? -->
-                                    <a href="{% url 'edit-animal' animal.id %}" type="button" class="btn btn-xs btn-primary">
+                                    <a href="{% url 'edit-animal' animal.id %}" type="button"
+                                       class="btn btn-xs btn-primary">
                                         <i class="fa fa-pencil"></i>
                                         &nbsp; Editar
                                     </a>
@@ -58,4 +63,38 @@
         </div>
     </div>
 
+    <script>
+        $(document).ready(function () {
+            $('#animal-table').DataTable({
+                "order": [],
+                "columnDefs": [
+                    {"orderable": false, "targets": 0}
+                ],
+                language: {
+                    "decimal": "",
+                    "emptyTable": "No hay datos disponibles para la tabla",
+                    "info": "_START_ - _END_ de _TOTAL_ entradas",
+                    "infoEmpty": "Sin resultados",
+                    "infoFiltered": "(Filtrado de un total de _MAX_ entradas)",
+                    "infoPostFix": "",
+                    "thousands": ".",
+                    "lengthMenu": "Mostrar _MENU_ entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "No hay resultados que coincidan con la busqueda",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Último",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    },
+                    "aria": {
+                        "sortAscending": ": activate to sort column ascending",
+                        "sortDescending": ": activate to sort column descending"
+                    }
+                }
+            })
+        });
+    </script>
 {% endblock %}

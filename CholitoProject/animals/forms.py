@@ -15,6 +15,7 @@ class AnimalForm(forms.ModelForm):
             'estimated_age',
             'description',
             'adoption_state',
+            'admission_date',
             'is_sterilized',
         )
         widgets = {
@@ -31,7 +32,8 @@ class AnimalForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(AnimalForm, self).__init__(*args, **kwargs)
         self.fields['animal_type'] = forms.ModelChoiceField(queryset=AnimalType.objects)
-
+        
+        
 class ImageForm(forms.Form):
     animal_image = forms.ImageField(required=False,
         widget=forms.FileInput(

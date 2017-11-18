@@ -2,7 +2,7 @@ from django.conf.urls import url
 
 from ong.views import ONGNaturalView, ONGIndexView, ONGAdoptedView, \
     ONGStatisticsView, ONGEditView, ONGAddAnimalView, ONGRequestsView, \
-    ONGEditAnimalView, ONGEditSterilizedStateView
+    ONGEditAnimalView, ONGEditSterilizedStateView, ONGcreateAnimalView
 
 urlpatterns = [
     url(r'^(?P<pk>\d+)/$', ONGNaturalView.as_view(), name='see-natural-ong'),
@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^statistics/$', ONGStatisticsView.as_view(), name='ong-statistics'),
     url(r'^edit/$', ONGEditView.as_view(), name='ong-edit'),
     url(r'^add/$', ONGAddAnimalView.as_view(), name='add-animal'),
+    url(r'^createAnimal/$', ONGcreateAnimalView.as_view(), name='create-animal'),
     url(r'^requests/(?P<pk>\d+)/$', ONGRequestsView.as_view(),
         name='see-requests'),
     url(r'^edit/animal/(?P<pk>\d+)$', ONGEditAnimalView.as_view(), name='edit-animal'),

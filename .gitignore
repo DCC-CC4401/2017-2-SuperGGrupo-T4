@@ -190,3 +190,5 @@ pip-selfcheck.json
 
 # PyCharm
 .idea/
+
+!CholitoProject/media/animals/animal-default.jpg

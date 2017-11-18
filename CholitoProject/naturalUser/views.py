@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin, \
+    LoginRequiredMixin
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
@@ -77,9 +78,10 @@ class UserDetail(PermissionRequiredMixin, LoginRequiredMixin, View):
         return redirect('/')
 
 
-class OngInViewTemplate(PermissionRequiredMixin, LoginRequiredMixin, TemplateView):
+class OngInViewTemplate(PermissionRequiredMixin, LoginRequiredMixin,
+                        TemplateView):
     permission_required = 'naturalUser.natural_user_access'
-    template_name = 'usuario-in-ong.html'
+    template_name = 'bizc8/usuario-in-ong.html'
     context = {}
 
     def get(self, request, **kwargs):
@@ -91,21 +93,10 @@ class OngInViewTemplate(PermissionRequiredMixin, LoginRequiredMixin, TemplateVie
 
 
 class OngOutViewTemplate(TemplateView):
-    template_name = 'usuario-out-ong.html'
+    template_name = 'bizc8/usuario-out-ong.html'
 
     def get(self, request, **kwargs):
         return render(request, self.template_name)
 
 
-class ONGFavView(View):
-    def get(self, request, **kwargs):
-        c_user = get_user_index(request.user)
-        ong = get_object_or_404(ONG, pk=request.GET.get('id'))
-        number_of_likes = ong.favourites
-        _, created = ONGLike.objects.get_or_create(natural_user=c_user, ong=ong)
-        if created:
-            number_of_likes = ONGLike.objects.filter(ong=ong).distinct().count()
-            ong.favourites = number_of_likes
-            ong.save()
 
-        return HttpResponse(number_of_likes)

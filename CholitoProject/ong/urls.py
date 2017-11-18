@@ -1,7 +1,8 @@
 from django.conf.urls import url
 
 from ong.views import ONGNaturalView, ONGIndexView, ONGAdoptedView, \
-    ONGStatisticsView, ONGEditView, ONGAddAnimalView, ONGRequestsView
+    ONGStatisticsView, ONGEditView, ONGAddAnimalView, ONGRequestsView, \
+    ONGFavView
 
 urlpatterns = [
     url(r'^(?P<pk>\d+)/$', ONGNaturalView.as_view(), name='see-natural-ong'),
@@ -12,4 +13,5 @@ urlpatterns = [
     url(r'^add/$', ONGAddAnimalView.as_view(), name='add-animal'),
     url(r'^requests/(?P<pk>\d+)/$', ONGRequestsView.as_view(),
         name='see-requests'),
+    url(r'^favourite/$', ONGFavView.as_view(), name='fav-ong'),
 ]

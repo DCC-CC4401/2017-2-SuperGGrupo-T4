@@ -11,7 +11,7 @@ from complaint.models import AnimalType
 from naturalUser.forms import SignUpForm, AvatarForm
 from naturalUser.models import NaturalUser
 from municipality.models import Municipality
-
+from ong.models import ONG
 
 class IndexView(TemplateView):
     context = {}
@@ -24,6 +24,9 @@ class IndexView(TemplateView):
         municipalities = Municipality.objects.all().values(
             'lat', 'lng', 'directions', 'name')
         self.context['municipalities'] = municipalities
+        ongs = ONG.objects.all().values(
+            'lat', 'lng', 'directions', 'name')
+        self.context['ongs'] = ongs
         if c_user is None:
             return render(request, 'index.html', context=self.context)
         return c_user.get_index(request, context=self.context)

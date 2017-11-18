@@ -14,13 +14,13 @@
                         <!-- Carousel items -->
                         <div class="carousel-inner">
 
+                            <div class="item" id="slide0" data-slide-number="0">
+                                <img class="img-rounded img-responsive" src="{{ selected_animal.avatar.url }}">
+                            </div>
+
                             {% for image in images %}
 
-                                <div class="item"
-                                        {% if forloop.counter0 == 0 %}
-                                     id="slide0"
-                                        {% endif %}
-                                     data-slide-number="{{ forloop.counter0 }}">
+                                <div class="item" data-slide-number="{{ forloop.counter0 }}">
                                     <img class="img-rounded img-responsive" src="{{ image.image.url }}">
                                 </div>
 

@@ -118,10 +118,11 @@ class ONGEditSterilizedStateView(PermissionRequiredMixin, LoginRequiredMixin, Vi
         c_user = get_user_index(request.user)
         self.context['c_user'] = c_user
         animal = get_object_or_404(Animal, pk=pk)
-        animal.is_sterilized = request.POST['status']
+        animal.is_sterilized = request.POST.get('status')
         animal.save()
         self.context['selected_animal'] = animal
         self.context['images'] = AnimalImage.objects.filter(animal=animal)
         self.context['adoptions_days'] = (timezone.now() - animal.admission_date).days
 
         return redirect('edit-animal', pk=pk)
+    

@@ -7,6 +7,7 @@ from django.views import View
 from django.views.generic import TemplateView
 
 from CholitoProject.userManager import get_user_index
+from animals.models import Animal
 from complaint.models import AnimalType
 from naturalUser.forms import SignUpForm, AvatarForm
 from naturalUser.models import NaturalUser
@@ -86,4 +87,14 @@ class ONGListView(View):
 
 
 class AnimalListView(View):
-    pass
+    template_name = 'show_animals.html'
+    context = {}
+
+    def get(self, request, **kwargs):
+        c_user = get_user_index(request.user)
+        self.context['c_user'] = c_user
+        animals = AnimalType.objects.all()
+        self.context['animals'] = animals
+        ong_animals = Animal.objects.filter(adoption_state=1)
+        self.context['ong_animals'] = ong_animals
+        return render(request, self.template_name, context=self.context)

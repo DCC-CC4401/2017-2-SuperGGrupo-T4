@@ -17,29 +17,33 @@
             var userPositionMarker = new google.maps.Marker({map: map, icon: "{% static 'images/location.png' %}"});
             var infowindow = new google.maps.InfoWindow({content: "Tu Posición"});
 
-            
-            // Try HTML5 geolocation.
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function(position) {
-            var pos = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
-            };
-            userPositionMarker.setPosition(pos);
-            userPositionMarker.addListener('click', function() {
-              infowindow.open(map, userPositionMarker);
-            });
-
-            map.setCenter(pos);
-            map.setZoom(12);
-          }, function() {
-            handleLocationError(true);
-          });
-        } else {
-          // Browser doesn't support Geolocation
-          handleLocationError(false);
-        }
+            getUserLocation(userPositionMarker);
           }
+
+          function getUserLocation(marker){
+            // Try HTML5 geolocation.
+            if (navigator.geolocation) {
+              navigator.geolocation.getCurrentPosition(function(position) {
+                var pos = {
+                  lat: position.coords.latitude,
+                  lng: position.coords.longitude
+                };
+                marker.setPosition(pos);
+                marker.addListener('click', function() {
+                  infowindow.open(map, userPositionMarker);
+                });
+
+                map.setCenter(pos);
+                map.setZoom(12);
+              }, function() {
+                handleLocationError(true);
+              });
+            } else {
+              // Browser doesn't support Geolocation
+              handleLocationError(false);
+            }
+          }
+
           function handleLocationError(browserHasGeolocation) {
             console.log(browserHasGeolocation);
             if (!browserHasGeolocation){

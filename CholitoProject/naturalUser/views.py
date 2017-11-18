@@ -21,11 +21,7 @@ class IndexView(TemplateView):
         self.context['c_user'] = c_user
         animals = AnimalType.objects.all()
         self.context['animals'] = animals
-        municipalities = Municipality.objects.all().values(
-            'lat', 'lng', 'directions', 'name')
-        self.context['municipalities'] = municipalities
-        ongs = ONG.objects.all().values(
-            'lat', 'lng', 'directions', 'name')
+        ongs = ONG.objects.all()
         self.context['ongs'] = ongs
         if c_user is None:
             return render(request, 'index.html', context=self.context)

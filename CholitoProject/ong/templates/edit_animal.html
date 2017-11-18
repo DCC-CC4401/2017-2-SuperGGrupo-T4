@@ -49,11 +49,11 @@
     <p>Genero: {{ selected_animal.get_gender_display }}</p>
     <p>Tipo de animal: {{ selected_animal.animal_type }}</p>
     <p>Edad estimada: {{ selected_animal.estimated_age }} años</p>
-    <p>Dias en adopcion: {{ adoptions_days }}</p>
+    <p>Dias en adopción: {{ adoptions_days }}</p>
     <p>Color: {{ selected_animal.color }}</p>
-    <p>Descripcion: {{ selected_animal.description }}</p>
-    <p>Estado Adopcion: {{ selected_animal.get_adoption_state_display }}</p>
-    <p>Estirilizado: {{ selected_animal.get_is_sterilized_display }}</p>
+    <p>Descripción: {{ selected_animal.description }}</p>
+    <p>Estado Adopción: {{ selected_animal.get_adoption_state_display }}</p>
+    <p>Esterilizado: {{ selected_animal.get_is_sterilized_display }}</p>
     <br>
     <p>Actualizar estado esterilización</p>
     <form method="POST" enctype="multipart/form-data" action="{% url 'update-animal' selected_animal.pk %}">

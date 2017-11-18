@@ -10,21 +10,22 @@ class ONG(models.Model):
     # is this really needed?
     directions = models.TextField(max_length=200, null=True)
     avatar = models.ImageField(upload_to='ong/avatar/')
+    favourites = models.IntegerField()
 
     def __str__(self):
         return self.name
 
 
-class ONGUser(User):
+class ONGUser(models.Model):
+    user = models.OneToOneField(User)
     ong = models.ForeignKey('ONG')
 
     def __str__(self):
-        return self.municipality.name + " User"
+        return self.ong.name + " User"
 
     def get_index(self, request, context):
         return redirect('/ong/')
 
-    # TODO: add permission
     def save(self, *args, **kwargs):
         super(ONGUser, self).save(*args, **kwargs)
         if not self.user.has_perm('ong_user_access'):

@@ -101,8 +101,11 @@ class ONGFavView(View):
     def get(self, request, **kwargs):
         c_user = get_user_index(request.user)
         ong = get_object_or_404(ONG, pk=request.GET.get('id'))
-        ONGLike.objects.get_or_create(natural_user=c_user, ong=ong)
-
-        number_of_likes = ONGLike.objects.filter(ong=ong).distinct().count()
+        number_of_likes = ong.favourites
+        _, created = ONGLike.objects.get_or_create(natural_user=c_user, ong=ong)
+        if created:
+            number_of_likes = ONGLike.objects.filter(ong=ong).distinct().count()
+            ong.favourites = number_of_likes
+            ong.save()
 
         return HttpResponse(number_of_likes)

@@ -1,0 +1,61 @@
+{% extends "Ong/ong-standard.html" %}
+{% block title %}Esperando adopción{% endblock %}
+
+{% block content-header %}Esperando adopción{% endblock %}
+
+{% block content %}
+
+    <div class="row hidden-xs hidden-sm">
+        <div class="col-lg-12">
+            <div class="box">
+                <div class="box-body">
+                    <div class="c-box__body__header">
+                        <a href="{% url 'add-animal' %}" class="btn btn-success">Agregar</a>
+                    </div>
+                    <table id="example2" class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>Foto</th>
+                            <th>Nombre</th>
+                            <th>Tipo</th>
+                            <th>Sexo</th>
+                            <th>Solicitudes</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for animal in animals %}
+                            <tr>
+                                <td style="vertical-align:middle;">
+                                    <img src="{{ animal.image.url }}" width="35">
+                                </td>
+                                <td style="vertical-align:middle;">{{ animal.name }}</td>
+                                <td style="vertical-align:middle;">{{ animal.animal_type }}</td>
+                                <td style="vertical-align:middle;">{{ animal.get_gender_display }}</td>
+                                <td><a href="{% url 'see-requests' animal.id %}"> {{ animal.total }}</a></td>
+                                <td style="text-align:right;vertical-align:middle;">
+                                    <!-- TODO: maybe other view? -->
+                                    <a href="{% url 'see-animal' animal.id %}" type="button"
+                                       class="btn btn-xs btn-info">
+                                        <i class="fa fa-eye"></i>
+                                        &nbsp; Ver
+                                    </a>
+                                    &nbsp;&nbsp;
+                                    <!-- TODO: why 2? -->
+                                    <a href="#" type="button" class="btn btn-xs btn-primary">
+                                        <i class="fa fa-pencil"></i>
+                                        &nbsp; Editar
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+    </div>
+
+{% endblock %}

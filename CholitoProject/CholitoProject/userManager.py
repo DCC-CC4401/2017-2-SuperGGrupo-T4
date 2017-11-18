@@ -1,5 +1,6 @@
 from naturalUser.models import NaturalUser
 from municipality.models import MunicipalityUser
+from ong.models import ONGUser
 
 
 def get_user_or_none(model, user):
@@ -15,6 +16,9 @@ def get_user_index(user):
     if original_user is not None:
         return original_user
     original_user = get_user_or_none(MunicipalityUser, user)
+    if original_user is not None:
+        return original_user
+    original_user = get_user_or_none(ONGUser, user)
     if original_user is not None:
         return original_user
     else:

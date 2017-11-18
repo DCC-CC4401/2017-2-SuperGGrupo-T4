@@ -14,6 +14,6 @@ urlpatterns = [
     url(r'^requests/(?P<pk>\d+)/$', ONGRequestsView.as_view(),
         name='see-requests'),
     url(r'^edit/animal/(?P<pk>\d+)$', ONGEditAnimalView.as_view(), name='edit-animal'),
-    url(r'^actstate/animal/(?P<pk>\d+)$', ONGEditSterilizedStateView.as_view(), name='act-sterilized'),
+    url(r'^update/animal/(?P<pk>\d+)$', ONGEditSterilizedStateView.as_view(), name='act-sterilized'),
 
 ]

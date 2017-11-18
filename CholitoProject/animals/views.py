@@ -1,12 +1,12 @@
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.views import View
+from django.utils import timezone
 
 from CholitoProject.userManager import get_user_index
 from animals.models import Animal, Adopt, AnimalImage
 from complaint.models import AnimalType
 from naturalUser.models import NaturalUser
-
 
 class AnimalRenderView(View):
     template_name = 'view_animal.html'
@@ -21,6 +21,7 @@ class AnimalRenderView(View):
         self.context['selected_animal'] = animal
         self.context['is_adopter'] = c_user.pk in adopt_users_pk
         self.context['images'] = AnimalImage.objects.filter(animal=animal)
+        self.context['adoptions_days'] = (timezone.now() - animal.admission_date).days
         return render(request, self.template_name, context=self.context)
 
 

@@ -16,6 +16,8 @@ class ComplaintForm(forms.ModelForm):
             'description',
             'from_complaint',
             'admission_date',
+            'is_sterilized',
+
         )
 
     def __init__(self, *args, **kwargs):

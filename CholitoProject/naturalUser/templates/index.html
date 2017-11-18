@@ -6,9 +6,26 @@
 {% block content-header %}Adoptar{% endblock %}
 
 {% block content %}
+        <script>
+          function initMap() {
 
+            var stgo = {lat: -33.4575106, lng: -70.6621742};
+            var map = new google.maps.Map(document.getElementById('map'), {
+              zoom: 6,
+              center: stgo
+            });
+            var marker = new google.maps.Marker({
+              position: stgo,
+              map: map
+            });
+          }
+        </script>
+        <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBexMfjTU6WVC7eL4q1IY0R2AsRo-938oM&callback=initMap">
+        </script>
+        <div id="map" style="height: 100%; width: 80%; position: absolute; margin: auto;"></div>
         {% if user.is_authenticated %}
-            <img src="{% static 'images/fav.jpg' %}" usemap="#image-map"/>
+<!--             <img src="{% static 'images/fav.jpg' %}" usemap="#image-map"/>
             <map name="image-map">
                 <area target="" alt="ong" title="ong" href="{% url 'user-ong-in' %}" coords="644,317,545,198"
                       shape="rect">
@@ -16,9 +33,9 @@
                       shape="rect">
                 <area target="" alt="ong" title="ong" href="{% url 'user-ong-in' %}" coords="469,502,602,612"
                       shape="rect">
-            </map>
+            </map> -->
         {% else %}
-            <img src="{% static 'images/noFav.jpg' %}" usemap="#image-map"/>
+            <!-- <img src="{% static 'images/noFav.jpg' %}" usemap="#image-map"/>
 
             <map name="image-map">
                 <area target="" alt="ong" title="ong" href="{% url 'user-ong-out' %}" coords="830,258,696,117"
@@ -27,7 +44,7 @@
                       shape="rect">
                 <area target="" alt="ong" title="ong" href="{% url 'user-ong-out' %}" coords="469,505,604,614"
                       shape="rect">
-            </map>
+            </map> -->
         {% endif %}
 
 {% endblock %}

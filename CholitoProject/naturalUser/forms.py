@@ -37,5 +37,5 @@ class SignUpForm(UserCreationForm):
 
 
 class AvatarForm(forms.Form):
-    avatar = forms.ImageField(
+    avatar = forms.ImageField(required=False,
         widget=forms.FileInput(attrs={'class': "form-control", 'placeholder': "Selecciona una imagen de perfil"}))

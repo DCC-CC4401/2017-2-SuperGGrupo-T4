@@ -5,9 +5,13 @@ from django.shortcuts import render
 from ong.models import ONG
 
 
+def default_avatar():
+    return 'n_users/avatar/user-default.jpg'
+
+
 class NaturalUser(models.Model):
     user = models.OneToOneField(User)
-    avatar = models.ImageField(upload_to='n_users/avatar/')
+    avatar = models.ImageField(upload_to='n_users/avatar/', default=default_avatar)
 
     def save(self, *args, **kwargs):
         super(NaturalUser, self).save(*args, **kwargs)

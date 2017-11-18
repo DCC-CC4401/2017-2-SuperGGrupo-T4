@@ -191,4 +191,6 @@ pip-selfcheck.json
 # PyCharm
 .idea/
 
+### Exceptions ###
+!CholitoProject/media/n_users/avatar/user-default.jpg
 !CholitoProject/media/animals/animal-default.jpg

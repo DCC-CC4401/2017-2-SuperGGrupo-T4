@@ -42,6 +42,12 @@
                 }
             });
         </script>
+    {% else %}
+        <script>
+            $('#like-button').click(function () {
+                alert("Tienes que estar registrado para poder seleccionar una ONG como favorita!")
+            });
+        </script>
     {% endif %}
 {% endblock %}
 
@@ -50,9 +56,7 @@
     {% for animal in ong_animals %}
         <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
             <div class="info-box">
-                                <span class="info-box-icon"
-                                      style="background:url({{ animal.avatar.url }});">
-                                </span>
+                <img class="info-box-icon" src="{{ animal.avatar.url }}">
                 <div class="info-box-content">
                                     <span class="info-box-number">
                                         {{ animal.name }}

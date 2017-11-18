@@ -15,13 +15,13 @@
                         <!-- Carousel items -->
                         <div class="carousel-inner">
 
+                            <div class="item" id="slide0" data-slide-number="0">
+                                <img class="img-rounded img-responsive" src="{{ selected_animal.avatar.url }}">
+                            </div>
+
                             {% for image in images %}
 
-                                <div class="item"
-                                        {% if forloop.counter0 == 0 %}
-                                     id="slide0"
-                                        {% endif %}
-                                     data-slide-number="{{ forloop.counter0 }}">
+                                <div class="item" data-slide-number="{{ forloop.counter0 }}">
                                     <img class="img-rounded img-responsive" src="{{ image.image.url }}">
                                 </div>
 
@@ -57,14 +57,14 @@
     <br><br>
     {% if user.is_authenticated %}
 
-            <div id="adopted" class="adopt">
-                <p>Has seleccionado adoptar este animal :)</p>
-            </div>
+        <div id="adopted" class="adopt">
+            <p>Has seleccionado adoptar este animal :)</p>
+        </div>
 
-            <button id="adopt" data-id="{{ selected_animal.pk }}" class="btn btn-mini btn-primary adopt"
-                    type="button">
-                ¡Adoptame!
-            </button>
+        <button id="adopt" data-id="{{ selected_animal.pk }}" class="btn btn-mini btn-primary adopt"
+                type="button">
+            ¡Adoptame!
+        </button>
 
     {% endif %}
 

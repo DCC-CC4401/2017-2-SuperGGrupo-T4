@@ -79,3 +79,11 @@ class UserDetail(PermissionRequiredMixin, LoginRequiredMixin, View):
             c_user.avatar = request.FILES['avatar']
         c_user.save()
         return redirect('/')
+
+
+class ONGListView(View):
+    pass
+
+
+class AnimalListView(View):
+    pass

@@ -8,8 +8,6 @@ urlpatterns = [
     url(r'^signup/$', SignUpView.as_view(), name='signup'),
     url(r'^$', IndexView.as_view(), name='user-index'),
     url(r'^user/$', UserDetail.as_view(), name='user-update'),
-    url(r'^user-ong-in/$', OngInViewTemplate.as_view(), name='user-ong-in'),
-    url(r'^user-ong-out/$', OngOutViewTemplate.as_view(), name='user-ong-out'),
 ]
 
 if settings.DEBUG:

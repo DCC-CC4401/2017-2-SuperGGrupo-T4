@@ -6,7 +6,7 @@ from django.views import View
 from CholitoProject.userManager import get_user_index
 from animals.models import Animal
 from complaint.models import AnimalType
-from naturalUser.models import ONGLike
+from naturalUser.models import ONGLike, NaturalUser
 from ong.models import ONG
 
 
@@ -75,3 +75,18 @@ class ONGEditView(PermissionRequiredMixin, LoginRequiredMixin, View):
 class ONGAddAnimalView(PermissionRequiredMixin, LoginRequiredMixin, View):
     permission_required = 'ong.ong_user_access'
     pass
+
+
+class ONGRequestsView(PermissionRequiredMixin, LoginRequiredMixin, View):
+    permission_required = 'ong.ong_user_access'
+    template_name = 'animal_requests.html'
+    context = {}
+
+    def get(self, request, pk, **kwargs):
+        user = get_user_index(request.user)
+        requests = NaturalUser.objects.filter(adopt__animal_id=pk,
+                                              adopt__animal__ong=user.ong)
+        self.context['c_user'] = user
+        self.context['users'] = requests
+
+        return render(request, self.template_name, context=self.context)

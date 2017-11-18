@@ -32,7 +32,7 @@
                                 <td style="vertical-align:middle;">{{ animal.name }}</td>
                                 <td style="vertical-align:middle;">{{ animal.animal_type }}</td>
                                 <td style="vertical-align:middle;">{{ animal.get_gender_display }}</td>
-                                <td>{{ animal.total }}</td>
+                                <td><a href="{% url 'see-requests' animal.id %}"> {{ animal.total }}</a></td>
                                 <td style="text-align:right;vertical-align:middle;">
                                     <!-- TODO: maybe other view? -->
                                     <a href="{% url 'see-animal' animal.id %}" type="button"

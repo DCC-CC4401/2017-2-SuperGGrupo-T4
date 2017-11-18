@@ -1,0 +1,41 @@
+{% extends "User/user-standard.html" %}
+
+{% block title %}Adopta!{% endblock %}
+
+{% block content-header %}Animales disponibles para adopción{% endblock %}
+
+{% block content %}
+    <div class="row">
+        {% for animal in ong_animals %}
+            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                <div class="info-box">
+                    <img class="info-box-icon" src="{{ animal.avatar.url }}">
+                    <div class="info-box-content">
+                                    <span class="info-box-number">
+                                        {{ animal.name }}
+                                    </span>
+                        <span class="info-box-text">{{ animal.animal_type }} | {{ animal.get_gender_display }}
+                        <br>
+                        {{ animal.ong.name }}
+                        </span>
+                        <div class="c-info-box__btns">
+                            <div class="c-info-box__btns__one">
+                                <a href="{% url 'see-animal' animal.id %}" type="button" class="btn btn-xs btn-info">
+                                    <i class="fa fa-eye"></i>
+                                    &nbsp; Ver
+                                </a>
+                            </div>
+                            <div class="c-info-box__btns__two">
+                                <a href="{% url 'see-natural-ong' animal.ong.id %}" type="button"
+                                   class="btn btn-xs btn-info">
+                                    <i class="fa fa-eye"></i>
+                                    &nbsp; Ver ONG
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

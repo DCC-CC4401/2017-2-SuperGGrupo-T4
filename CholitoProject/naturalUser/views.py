@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import PermissionRequiredMixin, \
     LoginRequiredMixin
+from django.db.models import Count
 from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import TemplateView
@@ -11,6 +12,7 @@ from animals.models import Animal
 from complaint.models import AnimalType
 from naturalUser.forms import SignUpForm, AvatarForm
 from naturalUser.models import NaturalUser
+from ong.models import ONG
 
 
 class IndexView(TemplateView):
@@ -83,7 +85,17 @@ class UserDetail(PermissionRequiredMixin, LoginRequiredMixin, View):
 
 
 class ONGListView(View):
-    pass
+    template_name = 'show_ong.html'
+    context = {}
+
+    def get(self, request, **kwargs):
+        c_user = get_user_index(request.user)
+        self.context['c_user'] = c_user
+        animals = AnimalType.objects.all()
+        self.context['animals'] = animals
+        ong = ONG.objects.filter(animal__adoption_state=1).annotate(animals=Count('animal'))
+        self.context['all_ong'] = ong
+        return render(request, self.template_name, context=self.context)
 
 
 class AnimalListView(View):

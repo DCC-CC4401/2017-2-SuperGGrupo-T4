@@ -1,0 +1,73 @@
+{% extends "Ong/ong-standard.html" %}
+{% block title %}Esperando adopción{% endblock %}
+
+{% block content-header %}Esperando adopción{% endblock %}
+
+{% block content %}
+	<form method="POST" enctype="multipart/form-data" action="{% url 'create-animal' %}">
+
+        {% csrf_token %}
+        <div class="form-group">
+            <label class="control-label col-sm-10" for="case-input">Nombre</label>
+            <div class="col-sm-10">
+                {{ form.name }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-10" for="animal_type-input">Sexo</label>
+            <div class="col-sm-10">
+                {{ form.gender }}
+            </div>
+        </div>
+        <div class="form-check form-check-inline">
+            <label class="control-label col-sm-10" for="gender-input">Tipo de Animal:</label>
+            <div class="col-sm-10">
+                {{ form.animal_type }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-10" for="color-input">Color:</label>
+            <div class="col-sm-10">
+                {{ form.color }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-10" for="wounded-input">Edad Estimada</label>
+            <div class="col-sm-10">
+                {{ form.estimated_age }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-10" for="municipality-input">Descripcion</label>
+            <div class="col-sm-10">
+                {{ form.description }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-10" for="wounded-input">¿Estirilizado?</label>
+            <div class="col-sm-10">
+                {{ form.is_sterilized }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-sm-10" for="image-input">Foto del animal:</label>
+            <div class="col-sm-10">
+                {{ image_form.animal_image }}
+            </div>
+        </div>
+
+        {{ form.directions }}
+
+        <div class="form-group">
+            <div class="col-sm-10">
+                <br>
+
+                <input type="submit" class="btn btn-primary" value="Agregar Animal"/>
+                <input type="reset" class="btn btn-default" value="Cancelar"/>
+            </div>
+        </div>
+
+    </form>
+
+{% endblock %}

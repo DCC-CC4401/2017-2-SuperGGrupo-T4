@@ -190,3 +190,7 @@ pip-selfcheck.json
 
 # PyCharm
 .idea/
+
+# Exceptions
+!media/n_users/avatar/user-default.jpg
+!media/animals/animal-default.jpg

@@ -1,15 +1,10 @@
 from django.db import models
-from django.core.files import File
-from CholitoProject.settings import BASE_DIR
 from complaint.models import Complaint, AnimalType
 from naturalUser.models import NaturalUser
 from ong.models import ONG
-import os
 
 def default_avatar():
     return 'animals/animal-default.jpg'
-    f = open(path)
-    return File(f)
 
 
 class AnimalImage(models.Model):

@@ -17,10 +17,10 @@
             var userPositionMarker = new google.maps.Marker({map: map, icon: "{% static 'images/location.png' %}"});
             var infowindow = new google.maps.InfoWindow({content: "Tu Posición"});
 
-            getUserLocation(userPositionMarker);
+            getUserLocation(userPositionMarker, map);
           }
 
-          function getUserLocation(marker){
+          function getUserLocation(marker, map){
             // Try HTML5 geolocation.
             if (navigator.geolocation) {
               navigator.geolocation.getCurrentPosition(function(position) {

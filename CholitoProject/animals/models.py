@@ -16,6 +16,19 @@ class Animal(models.Model):
         (2, "Hembra"),
     )
 
+    ADOPTION_OPTIONS = (
+        (1, "En adopcion"),
+        (2, "Procesando Solicitud Adopcion"),
+        (3, "Adoptado"),
+    )
+
+    STERILIZED_OPTIONS = (
+        (True, "Sí"),
+        (False, "No")
+    )
+
+
+
     name = models.TextField(max_length=100)
     gender = models.SmallIntegerField(choices=GENDER_OPTIONS)
     description = models.TextField(max_length=1000)
@@ -23,6 +36,8 @@ class Animal(models.Model):
     color = models.TextField(max_length=50)
     estimated_age = models.PositiveSmallIntegerField()
     admission_date = models.DateTimeField(auto_now_add = True)
+    adoption_state = models.SmallIntegerField(choices=ADOPTION_OPTIONS, blank=1, null=1)
+    is_sterilized = models.NullBooleanField(choices=STERILIZED_OPTIONS, blank=False, null=False)
     # TODO: delete when ong is deleted?
     ong = models.ForeignKey(ONG)
 

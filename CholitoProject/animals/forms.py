@@ -14,11 +14,11 @@ class ComplaintForm(forms.ModelForm):
             'color',
             'estimated_age',
             'description',
-            'from_complaint',
             'admission_date',
+            'is_sterilized',
+
         )
 
     def __init__(self, *args, **kwargs):
         super(ComplaintForm, self).__init__(*args, **kwargs)
         self.fields['animal_type'] = forms.ModelChoiceField(queryset=AnimalType.objects)
-        self.fields['from_complaint'] = forms.ModelChoiceField(queryset=Complaint.objects)

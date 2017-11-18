@@ -8,7 +8,7 @@ urlpatterns = [
     url(r'^login/$', LogInView.as_view(), name='login'),
     url(r'^signup/$', SignUpView.as_view(), name='signup'),
     url(r'^$', IndexView.as_view(), name='user-index'),
-    url(r'^user/$', UserDetail.as_view(), name='user-update'),
+    url(r'^update/$', UserDetail.as_view(), name='user-update'),
     url(r'^show/ong/$', ONGListView.as_view(), name='show-ong'),
     url(r'^show/animals/$', AnimalListView.as_view(), name='show-animals'),
 ]

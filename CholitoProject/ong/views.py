@@ -2,16 +2,14 @@ from django.contrib.auth.mixins import PermissionRequiredMixin, \
     LoginRequiredMixin
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views import View
 from django.utils import timezone
+from django.views import View
 
 from CholitoProject.userManager import get_user_index
-from animals.models import Animal
+from animals.models import Animal, AnimalImage
 from complaint.models import AnimalType
 from naturalUser.models import ONGLike, NaturalUser
 from ong.models import ONG
-from animals.models import Animal, Adopt, AnimalImage
-
 
 
 # TODO: use adopt.animal.ong == this_ong to load a notification tab with pending adoptions
@@ -87,6 +85,8 @@ class ONGRequestsView(PermissionRequiredMixin, LoginRequiredMixin, View):
     context = {}
 
     def get(self, request, pk, **kwargs):
+        self.context['animal'] = get_object_or_404(Animal, pk=pk)
+
         user = get_user_index(request.user)
         requests = NaturalUser.objects.filter(adopt__animal_id=pk,
                                               adopt__animal__ong=user.ong)
@@ -94,7 +94,7 @@ class ONGRequestsView(PermissionRequiredMixin, LoginRequiredMixin, View):
         self.context['users'] = requests
 
         return render(request, self.template_name, context=self.context)
-      
+
 
 class ONGFavView(View):
     def get(self, request, **kwargs):
@@ -111,7 +111,7 @@ class ONGFavView(View):
 
         return HttpResponse(number_of_likes)
 
-      
+
 class ONGEditAnimalView(PermissionRequiredMixin, LoginRequiredMixin, View):
     permission_required = 'ong.ong_user_access'
     template_name = 'edit_animal.html'
@@ -124,11 +124,13 @@ class ONGEditAnimalView(PermissionRequiredMixin, LoginRequiredMixin, View):
         animal = get_object_or_404(Animal, pk=pk)
         self.context['selected_animal'] = animal
         self.context['images'] = AnimalImage.objects.filter(animal=animal)
-        self.context['adoptions_days'] = (timezone.now() - animal.admission_date).days
+        self.context['adoptions_days'] = (
+        timezone.now() - animal.admission_date).days
         return render(request, self.template_name, context=self.context)
 
-      
-class ONGEditSterilizedStateView(PermissionRequiredMixin, LoginRequiredMixin, View):
+
+class ONGEditSterilizedStateView(PermissionRequiredMixin, LoginRequiredMixin,
+                                 View):
     permission_required = 'ong.ong_user_access'
     template_name = 'edit_animal.html'
     context = {'animals': AnimalType.objects.all()}
@@ -139,9 +141,4 @@ class ONGEditSterilizedStateView(PermissionRequiredMixin, LoginRequiredMixin, Vi
         animal = get_object_or_404(Animal, pk=pk)
         animal.is_sterilized = request.POST.get('status')
         animal.save()
-        self.context['selected_animal'] = animal
-        self.context['images'] = AnimalImage.objects.filter(animal=animal)
-        self.context['adoptions_days'] = (timezone.now() - animal.admission_date).days
-
         return redirect('edit-animal', pk=pk)
-    

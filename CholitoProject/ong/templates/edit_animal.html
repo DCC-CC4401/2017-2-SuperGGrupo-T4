@@ -1,10 +1,10 @@
 {% extends "Ong/ong-standard.html" %}
-{% block title %}Esperando adopción{% endblock %}
+{% block title %}Editar ficha de {{ selected_animal.name }}{% endblock %}
 
-{% block content-header %}Esperando adopción{% endblock %}
+{% block content-header %}Editar ficha de {{ selected_animal.name }}{% endblock %}
 
 {% block content %}
-<!-- slider -->
+    <!-- slider -->
     <div class="row">
         <div class="col-md-9" id="slider">
             <!-- Top part of the slider -->
@@ -45,28 +45,25 @@
         });
     </script>
 
-
+    <!-- TODO: FIX, allow all fields to be modifiable -->
     <p>Genero: {{ selected_animal.get_gender_display }}</p>
     <p>Tipo de animal: {{ selected_animal.animal_type }}</p>
     <p>Edad estimada: {{ selected_animal.estimated_age }} años</p>
     <p>Dias en adopcion: {{ adoptions_days }}</p>
     <p>Color: {{ selected_animal.color }}</p>
     <p>Descripcion: {{ selected_animal.description }}</p>
-    <p>Estado Adopcion: {{ selected_animal.get_adoption_state_display}}</p>
-    <p>Estirilizado: {{ selected_animal.get_is_sterilized_display}}</p>
+    <p>Estado Adopcion: {{ selected_animal.get_adoption_state_display }}</p>
+    <p>Estirilizado: {{ selected_animal.get_is_sterilized_display }}</p>
     <br>
-    <p>Actualizar estado esterilizacion</p>
-    <form method="POST" enctype="multipart/form-data" action="{% url 'act-sterilized' selected_animal.pk %}">    
-            {% csrf_token %}
-            <select class="btn btn-default btn-lg" id="status" name="status">
-                <option value="True">Estirilizado</option>
-                <option value="False">No Estirilizado</option>
-            </select>
+    <p>Actualizar estado esterilización</p>
+    <form method="POST" enctype="multipart/form-data" action="{% url 'update-animal' selected_animal.pk %}">
+        {% csrf_token %}
+        <select class="btn btn-default btn-lg" id="status" name="status">
+            <option value="True">Esterilizado</option>
+            <option value="False">No Esterilizado</option>
+        </select>
 
-            <button type="submit" class="btn btn-primary btn-lg">Actualizar Estado Esterlizacion</button>
+        <button type="submit" class="btn btn-primary btn-lg">Actualizar Estado Esterlización</button>
     </form>
-
-    
-    <br><br>
 
 {% endblock %}

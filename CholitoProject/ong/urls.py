@@ -15,5 +15,5 @@ urlpatterns = [
         name='see-requests'),
     url(r'^favourite/$', ONGFavView.as_view(), name='fav-ong'),
     url(r'^edit/animal/(?P<pk>\d+)$', ONGEditAnimalView.as_view(), name='edit-animal'),
-    url(r'^update/animal/(?P<pk>\d+)$', ONGEditSterilizedStateView.as_view(), name='act-sterilized'),
+    url(r'^update/animal/(?P<pk>\d+)$', ONGEditSterilizedStateView.as_view(), name='update-animal'),
 ]

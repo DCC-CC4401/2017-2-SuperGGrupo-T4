@@ -51,8 +51,13 @@ class SignUpView(View):
         if user_form.is_valid() and avatar_form.is_valid():
             user_ = user_form.save()
             user_.refresh_from_db()
-            natural_user = NaturalUser.objects.create(
-                user=user_, avatar=avatar_form.cleaned_data.get('avatar'))
+            avatar_ = avatar_form.cleaned_data.get('avatar')
+            if avatar_ is None:
+                natural_user = NaturalUser.objects.create(
+                    user=user_)
+            else:
+                natural_user = NaturalUser.objects.create(
+                    user=user_, avatar=avatar_)
             username = user_form.cleaned_data.get('email')
             raw_password = user_form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)

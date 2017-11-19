@@ -22,7 +22,7 @@
                                 <input type="file" id="exampleInputFile" name="avatar">
                             </div>
 
-
+                            <!--
                             {% for image in images %}
 
                                 <div class="item" data-slide-number="{{ forloop.counter0 }}">
@@ -30,6 +30,7 @@
                                 </div>
 
                             {% endfor %}
+                            -->
 
                         </div><!--/carousel-inner-->
                     </div><!--/carousel-->
@@ -53,7 +54,7 @@
     {% csrf_token %}
 
     <div class="form-group">
-        <label class="control-label col-sm-10" for="case-input">Genero: 
+        <label class="control-label col-sm-10">Sexo: 
         {{ selected_animal.get_gender_display }}  
         </label>
         <div class="col-sm-10">
@@ -66,7 +67,7 @@
     </div>
 
     <div class="form-group">
-        <label class="control-label col-sm-10" for="case-input">Tipo de animal: 
+        <label class="control-label col-sm-10">Tipo de animal: 
         {{ selected_animal.animal_type }}</label>
             <div class="col-sm-10">
                 <select class="btn btn-default btn-lg" id="status" name="animal_type">
@@ -79,7 +80,7 @@
             </div>
     </div> 
     <div class="form-group">
-        <label class="control-label col-sm-10" for="case-input">Edad Estimada:</label>
+        <label class="control-label col-sm-10">Edad Estimada:</label>
             <div class="col-sm-10">
                 <input type="number" name = "estimated_age" value = "{{ selected_animal.estimated_age }}"> 
             </div>
@@ -87,35 +88,35 @@
 
 
     <div class="form-group">
-        <label class="control-label col-sm-10" for="case-input">Fecha Ingreso:</label>
+        <label class="control-label col-sm-10">Fecha Ingreso:</label>
         <div class="col-sm-10">
             <input type="date" name = "admission_date" value = "{{ admission_date }}">
         </div>
     </div> 
 
     <div class="form-group">
-        <label class="control-label col-sm-10" for="case-input">Color:</label>
+        <label class="control-label col-sm-10"">Color:</label>
         <div class="col-sm-10">
             <input type="text" name="color" value="{{ selected_animal.color }}">
         </div>
     </div>
 
     <div class="form-group">
-        <label class="control-label col-sm-10" for="case-input">Descripcion:</label>
+        <label class="control-label col-sm-10">Descripción:</label>
         <div class="col-sm-10">
             <input type="text" name = "description" value="{{ selected_animal.description }}">
         </div>
     </div>
 
     <div class="form-group">
-        <label class="control-label col-sm-10" for="case-input">Estado Adopción:
+        <label class="control-label col-sm-10">Estado Adopción:
         {{ selected_animal.get_adoption_state_display }}
         </label>
         <div class="col-sm-10">
         <select class="btn btn-default btn-lg" id="status" name="adoption_state">
             <option value="0">Editar estado</option>
-            <option value="1">En adopcion</option>
-            <option value="2">Procesando Solicitud Adopcion</option>
+            <option value="1">En adopción</option>
+            <option value="2">Procesando Solicitud Adopción</option>
             <option value="3">Adoptado</option>
         </select>
         </div>
@@ -123,14 +124,14 @@
 
 
     <div class="form-group">
-        <label class="control-label col-sm-10" for="case-input">Estiirilizado:
+        <label class="control-label col-sm-10">Esterilizado:
         {{ selected_animal.get_is_sterilized_display }}
         </label>
         <div class="col-sm-10">
         <select class="btn btn-default btn-lg" id="status" name="is_sterilized">
             <option value="0">Editar estado</option>
             <option value="True">Esterilizado</option>
-            <option value="False">No Esterilizado</option>>
+            <option value="False">No Esterilizado</option>
         </select>
         </div>
     </div>

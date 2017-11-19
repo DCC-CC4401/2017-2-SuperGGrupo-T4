@@ -6,7 +6,7 @@
 
 {% block content %}
 <script>
-    $( document ).ready(function() {
+    
         getUserLocation();
           function getUserLocation(){
             // Try HTML5 geolocation.
@@ -19,6 +19,9 @@
 
                 document.getElementById("id_complaint-lat").value = pos.lat;
                 document.getElementById("id_complaint-lng").value = pos.lng;
+
+                var geocoder = new google.maps.Geocoder;
+                geocodeLatLng(geocoder, pos);
 
               }, function() {
                 handleLocationError(true);
@@ -35,8 +38,27 @@
                 alert("No hemos podido acceder a tu ubicación, te mostraremos información cerca a Santiago");
             }
         }
-});
 
+        function geocodeLatLng(geocoder, pos) {
+        
+        geocoder.geocode({'location': pos}, function(results, status) {
+          if (status === 'OK') {
+            if (results[1]) {
+                console.log(results);
+                document.getElementById("id_complaint-directions").value = results[0].formatted_address;
+            } else {
+              console.log('No results found');
+            }
+          } else {
+            console.log('Geocoder failed due to: ' + status);
+          }
+        });
+      }
+
+
+        </script>
+        <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBexMfjTU6WVC7eL4q1IY0R2AsRo-938oM&callback=getUserLocation">
         </script>
     <form method="POST" enctype="multipart/form-data" action="{% url 'make-complaint' %}">
 

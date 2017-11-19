@@ -186,3 +186,22 @@ class ONGEUpdateAnimalView(PermissionRequiredMixin, LoginRequiredMixin,
 
         animal.save()
         return redirect('edit-animal', pk=pk)
+
+
+class ONGAnimalView(PermissionRequiredMixin, LoginRequiredMixin,
+                                 View):
+    permission_required = 'ong.ong_user_access'
+    template_name = 'view_animal_ong.html'
+    context = {'animals': AnimalType.objects.all()}
+
+    def get(self, request, pk, **kwargs):
+        c_user = get_user_index(request.user)
+        self.context['c_user'] = c_user
+        animal = get_object_or_404(Animal, pk=pk)
+        self.context['selected_animal'] = animal
+        self.context['images'] = AnimalImage.objects.filter(animal=animal)
+        self.context['adoptions_days'] = (
+            timezone.now().date() - animal.admission_date).days
+        
+        return render(request, self.template_name, context=self.context)
+

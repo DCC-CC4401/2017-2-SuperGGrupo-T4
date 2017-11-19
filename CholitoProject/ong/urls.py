@@ -3,7 +3,7 @@ from django.conf.urls import url
 from ong.views import ONGNaturalView, ONGIndexView, ONGAdoptedView, \
     ONGStatisticsView, ONGEditView, ONGAddAnimalView, ONGRequestsView, \
     ONGFavView, ONGEditAnimalView, ONGCreateAnimalView, \
-    ONGEUpdateAnimalView
+    ONGEUpdateAnimalView, ONGAnimalView
 
 urlpatterns = [
     url(r'^(?P<pk>\d+)/$', ONGNaturalView.as_view(), name='see-natural-ong'),
@@ -21,4 +21,6 @@ urlpatterns = [
         name='edit-animal'),
     url(r'^update/animal/(?P<pk>\d+)$', ONGEUpdateAnimalView.as_view(),
         name='update-animal'),
+    url(r'^animal/(?P<pk>\d+)$', ONGAnimalView.as_view(),
+        name='see-animal-ong'),
 ]

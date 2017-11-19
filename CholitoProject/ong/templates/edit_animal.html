@@ -4,6 +4,7 @@
 {% block content-header %}Editar ficha de {{ selected_animal.name }}{% endblock %}
 
 {% block content %}
+    <form method="POST" enctype="multipart/form-data" action="{% url 'update-animal' selected_animal.pk %}"> 
     <!-- slider -->
     <div class="row">
         <div class="col-md-9" id="slider">
@@ -16,7 +17,11 @@
 
                             <div class="item" id="slide0" data-slide-number="0">
                                 <img class="img-rounded img-responsive" src="{{ selected_animal.avatar.url }}">
+                                Editar Avatar
+
+                                <input type="file" id="exampleInputFile" name="avatar">
                             </div>
+
 
                             {% for image in images %}
 
@@ -43,8 +48,7 @@
         $(document).ready(function () {
             jQuery("#slide0").addClass("active");
         });
-    </script>
-    <form method="POST" enctype="multipart/form-data" action="{% url 'update-animal' selected_animal.pk %}">    
+    </script>   
 
     {% csrf_token %}
 
@@ -54,20 +58,26 @@
         </label>
         <div class="col-sm-10">
             <select class="btn btn-default btn-lg" id="status" name="gender">
-                <option value="0">Actualizar Genero</option>
+                <option value="0">Editar Genero</option>
                 <option value="1">Macho</option>
                 <option value="2">Hembra</option>
             </select>
         </div>
     </div>
 
-    <!-- <div class="form-group">
+    <div class="form-group">
         <label class="control-label col-sm-10" for="case-input">Tipo de animal: 
         {{ selected_animal.animal_type }}</label>
             <div class="col-sm-10">
-                
+                <select class="btn btn-default btn-lg" id="status" name="animal_type">
+                <option value = "0">Editar tipo Animal </option>
+                {% for animal in animals %} 
+                <option>{{ animal }}</option> 
+                {% endfor %}
+
+                </select>
             </div>
-    </div> --> 
+    </div> 
     <div class="form-group">
         <label class="control-label col-sm-10" for="case-input">Edad Estimada:</label>
             <div class="col-sm-10">
@@ -103,7 +113,7 @@
         </label>
         <div class="col-sm-10">
         <select class="btn btn-default btn-lg" id="status" name="adoption_state">
-            <option value="0">Actualizar estado</option>
+            <option value="0">Editar estado</option>
             <option value="1">En adopcion</option>
             <option value="2">Procesando Solicitud Adopcion</option>
             <option value="3">Adoptado</option>
@@ -118,7 +128,7 @@
         </label>
         <div class="col-sm-10">
         <select class="btn btn-default btn-lg" id="status" name="is_sterilized">
-            <option value="0">Actualizar estado</option>
+            <option value="0">Editar estado</option>
             <option value="True">Esterilizado</option>
             <option value="False">No Esterilizado</option>>
         </select>

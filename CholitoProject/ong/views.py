@@ -6,6 +6,7 @@ from django.utils import timezone
 from django.views import View
 
 from CholitoProject.userManager import get_user_index
+from animals.forms import AnimalForm, ImageForm
 from animals.models import Animal, AnimalImage
 from complaint.models import AnimalType
 from naturalUser.models import ONGLike, NaturalUser
@@ -76,7 +77,33 @@ class ONGEditView(PermissionRequiredMixin, LoginRequiredMixin, View):
 
 class ONGAddAnimalView(PermissionRequiredMixin, LoginRequiredMixin, View):
     permission_required = 'ong.ong_user_access'
-    pass
+    form = AnimalForm(prefix='animal')
+    image_form = ImageForm(prefix='image')
+    context = {'form': form, 'image_form': image_form}
+    template_name = 'add_animal.html'
+
+    def get(self, request, **kwargs):
+        user = get_user_index(request.user)
+        self.context['c_user'] = user
+
+        return render(request, self.template_name, context=self.context)
+
+
+class ONGCreateAnimalView(PermissionRequiredMixin, LoginRequiredMixin, View):
+    permission_required = 'ong.ong_user_access'
+
+    def post(self, request, **kwargs):
+        form = AnimalForm(request.POST, request.FILES, prefix='animal')
+        image_form = ImageForm(request.POST, request.FILES, prefix='image')
+        if form.is_valid():
+            animal = form.save(commit=False)
+            animal.ong = get_user_index(request.user).ong
+            animal.save()
+            if image_form.is_valid():
+                AnimalImage.objects.create(
+                    animal=animal,
+                    image=image_form.cleaned_data.get('animal_image'))
+        return redirect('ong-index')
 
 
 class ONGRequestsView(PermissionRequiredMixin, LoginRequiredMixin, View):

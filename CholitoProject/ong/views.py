@@ -1,3 +1,4 @@
+import locale, datetime, calendar
 from django.contrib.auth.mixins import PermissionRequiredMixin, \
     LoginRequiredMixin
 from django.http import HttpResponse
@@ -19,7 +20,6 @@ class ONGDispatcherView(View):
 
     context = {'animals': AnimalType.objects.all()}
 
-
     def get(self, request, pk, **kwargs):
         c_user = get_user_index(request.user)
         self.context['c_user'] = c_user
@@ -33,6 +33,32 @@ class ONGDispatcherView(View):
             self.context['liked'] = liked
 
         elif c_user.user.has_perm('municipality.municipality_user_access'):
+
+            locale.setlocale(locale.LC_TIME, '')
+
+            dates = []
+            date = datetime.date.today()
+            for i in range(3):
+                dates.append(date)
+                date = date.replace(day=1) - datetime.timedelta(days=1)
+
+            # [month, id, quantity, position] = ['enero', 'Esterilizaciones', 80, 1]
+            data = []
+            position = 0
+            for date in reversed(dates):
+                month = calendar.month_name[date.month]
+                admisions = len(
+                    Animal.objects.filter(admission_date__year=date.year, admission_date__month=date.month,
+                                          ong=ong))
+                # adoptions = len(Animal.objects.filter(adoption_date__year=today.year, adoption_date__month=today.year, ong__pk=1))
+                # sterilizations = len(Animal.objects.filter(sterilization_date__year=today.year, sterilization_date__month=today.year, ong__pk=1))
+
+                data.append([month, 'Admisiones', admisions, position])
+                # data.append[month, 'Adopciones', adoptions]
+                # data.append[month, 'Esterilizaciones', sterilizations]
+                position += 1
+
+            self.context['data'] = data
             self.template_name = 'municipality_user_ong.html'
 
         return render(request, self.template_name, context=self.context)

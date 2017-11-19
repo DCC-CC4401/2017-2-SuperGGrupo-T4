@@ -10,8 +10,6 @@
         <div class="col-xs-6">
             <br>
             {{ ong.name }}
-            &nbsp;<a id="like-button" href="#" data-id="{{ ong.pk }}"
-        </a>
             <br>
             <small>
                 <i class="fa fa-star c-star"></i>
@@ -23,31 +21,28 @@
 {% endblock %}
 
 {% block content %}
-
     <script src="http://d3plus.org/js/d3.js"></script>
     <script src="http://d3plus.org/js/d3plus.js"></script>
 
     <div id="viz"></div>
-
     <script>
-        var data = [
-            {"Mes": "Agosto", "id": "Esterilizaciones", "Cantidad": 100},
-            {"Mes": "Agosto", "id": "Adopciones", "Cantidad": 70},
-            {"Mes": "Septiembre", "id": "Esterilizaciones", "Cantidad": 80},
-            {"Mes": "Septiembre", "id": "Adopciones", "Cantidad": 40},
-            {"Mes": "Octubre", "id": "Esterilizaciones", "Cantidad": 40},
-            {"Mes": "Octubre", "id": "Adopciones", "Cantidad": 2},
-            {"Mes": "Noviembre", "id": "Esterilizaciones", "Cantidad": 20},
-            {"Mes": "Noviembre", "id": "Adopciones", "Cantidad": 10}
+        var datas = [
+            {% for stat in data%}
+                {"Mes": "{{ stat.0 }}", "Dato": "{{ stat.1 }}", "Cantidad": {{ stat.2 }}, "pos": {{ stat.3 }} },
+            {% endfor %}
         ];
         var visualization = d3plus.viz()
             .container("#viz")
-            .data(data)
+            .data(datas)
             .type("bar")
+            .id("Dato")
             .x("Mes")
             .y("Cantidad")
+            .order({
+                "sort": "asc",
+                "value": "pos"
+            })
             .draw()
     </script>
-
 
 {% endblock %}

@@ -170,7 +170,8 @@ class ONGEUpdateAnimalView(PermissionRequiredMixin, LoginRequiredMixin,
         animal.color = request.POST.get('color')
         animal.description = request.POST.get('description')
         if request.POST.get('animal_type') != "0":
-            animal.animal_type = request.POST.get('animal_type')
+            animal.animal_type = get_object_or_404(AnimalType, 
+                name=request.POST.get('animal_type'))
         if request.POST.get('is_sterilized') != "0":
             animal.is_sterilized = request.POST.get('is_sterilized')
         if request.POST.get('adoption_state') != "0":

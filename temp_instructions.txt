@@ -1,5 +1,5 @@
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.auth.models import Permission
+from django.contrib.auth.models import Permission, Group
 from naturalUser.models import NaturalUser
 from municipality.models import MunicipalityUser
 from ong.models import ONGUser
@@ -26,3 +26,17 @@ permission = Permission.objects.create(
     name='Can Publish Posts',
     content_type=content_type,
 )
+
+# Creating groups for admins
+
+ong_group, created = Group.objects.get_or_create(name='ONG Admin')
+ong_group.permissions.add(Permission.objects.get(codename="change_municipality"))
+ong_group.permissions.add(Permission.objects.get(codename="add_municipalityuser"))
+ong_group.permissions.add(Permission.objects.get(codename="change_municipalityuser"))
+ong_group.permissions.add(Permission.objects.get(codename="delete_municipalityuser"))
+
+municipality_group, created = Group.objects.get_or_create(name='Municipality Admin')
+municipality_group.permissions.add(Permission.objects.get(codename="change_ong"))
+municipality_group.permissions.add(Permission.objects.get(codename="add_onguser"))
+municipality_group.permissions.add(Permission.objects.get(codename="change_onguser"))
+municipality_group.permissions.add(Permission.objects.get(codename="delete_onguser"))

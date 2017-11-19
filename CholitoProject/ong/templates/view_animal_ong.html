@@ -1,6 +1,5 @@
-{% extends "User/user-standard.html" %}
-
-{% block title %}{{ selected_animal.name }}{% endblock %}
+{% extends "Ong/ong-standard.html" %}
+{% block title %}Ficha de {{ selected_animal.name }}{% endblock %}
 
 {% block content-header %}{{ selected_animal.name }}{% endblock %}
 
@@ -54,38 +53,11 @@
     <p>Color: {{ selected_animal.color }}</p>
     <p>Descripcion: {{ selected_animal.description }}</p>
 
-    <br><br>
-    {% if user.is_authenticated %}
+    <br>
+    <br>
 
-        <div id="adopted" class="adopt">
-            <p>Has seleccionado adoptar este animal :)</p>
-        </div>
-
-        <button id="adopt" data-id="{{ selected_animal.pk }}" class="btn btn-mini btn-primary adopt"
-                type="button">
-            ¡Adoptame!
-        </button>
-
-    {% endif %}
-
-    <script>
-        $('#adopt').click(function () {
-            var animal_id = $(this).attr("data-id");
-            $.get('{% url 'adopt' %}', {id: animal_id}, function () {
-                $('#adopt').hide();
-                $('#adopted').show();
-                alert("Hemos enviado tu información a la ONG correspondiente!");
-            });
-        });
-
-        $(document).ready(function () {
-            $('.adopt').hide();
-            if ("{{ is_adopter }}" === "True") {
-                $('#adopted').show();
-            } else {
-                $('#adopt').show();
-            }
-        });
-    </script>
+    <a href="{% url 'edit-animal' selected_animal.id %}" type="button" class="btn btn-primary">
+    	Editar Animal 
+    </a>
 
 {% endblock %}

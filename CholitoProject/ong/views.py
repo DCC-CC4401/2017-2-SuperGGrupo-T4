@@ -98,6 +98,8 @@ class ONGCreateAnimalView(PermissionRequiredMixin, LoginRequiredMixin, View):
         if form.is_valid():
             animal = form.save(commit=False)
             animal.ong = get_user_index(request.user).ong
+            if animal.is_sterilized:
+                animal.sterilized_date = timezone.now()
             animal.save()
             if image_form.is_valid():
                 animal_extra_image = image_form.cleaned_data.get('animal_image')
@@ -179,10 +181,33 @@ class ONGEUpdateAnimalView(PermissionRequiredMixin, LoginRequiredMixin,
                 name=request.POST.get('animal_type'))
         if request.POST.get('is_sterilized') != "0":
             animal.is_sterilized = request.POST.get('is_sterilized')
+            if animal.is_sterilized:
+                animal.sterilized_date = timezone.now()
         if request.POST.get('adoption_state') != "0":
             animal.adoption_state = request.POST.get('adoption_state')
+            if request.POST.get('adoption_state') == "3":
+                animal.adoption_date = timezone.now()
         if 'avatar' in request.FILES:
             animal.avatar = request.FILES['avatar']
 
         animal.save()
         return redirect('edit-animal', pk=pk)
+
+
+class ONGAnimalView(PermissionRequiredMixin, LoginRequiredMixin,
+                                 View):
+    permission_required = 'ong.ong_user_access'
+    template_name = 'view_animal_ong.html'
+    context = {'animals': AnimalType.objects.all()}
+
+    def get(self, request, pk, **kwargs):
+        c_user = get_user_index(request.user)
+        self.context['c_user'] = c_user
+        animal = get_object_or_404(Animal, pk=pk)
+        self.context['selected_animal'] = animal
+        self.context['images'] = AnimalImage.objects.filter(animal=animal)
+        self.context['adoptions_days'] = (
+            timezone.now().date() - animal.admission_date).days
+        
+        return render(request, self.template_name, context=self.context)
+

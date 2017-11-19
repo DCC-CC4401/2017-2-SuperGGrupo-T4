@@ -148,6 +148,7 @@ class ONGEditAnimalView(PermissionRequiredMixin, LoginRequiredMixin, View):
         c_user = get_user_index(request.user)
         self.context['c_user'] = c_user
         animal = get_object_or_404(Animal, pk=pk)
+        self.context['admission_date'] = animal.admission_date.strftime("%Y-%m-%d")
         self.context['selected_animal'] = animal
         self.context['images'] = AnimalImage.objects.filter(animal=animal)
         return render(request, self.template_name, context=self.context)
@@ -166,7 +167,7 @@ class ONGEUpdateAnimalView(PermissionRequiredMixin, LoginRequiredMixin,
         if request.POST.get('gender') != "0":
             animal.gender = request.POST.get('gender')
         animal.estimated_age = request.POST.get('estimated_age')
-        #animal.admission_date = request.POST.get('admission_date')
+        animal.admission_date = request.POST.get('admission_date')
         animal.color = request.POST.get('color')
         animal.description = request.POST.get('description')
         if request.POST.get('animal_type') != "0":

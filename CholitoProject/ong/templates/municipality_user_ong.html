@@ -1,0 +1,53 @@
+{% extends 'Municipality/municipality-standard.html' %}
+
+{% block title %}{{ ong.name }}{% endblock %}
+
+{% block content-header %}
+    <div class="row">
+        <div class="c-fundacion-title">
+            <img src="{{ ong.avatar.url }}" class="user-image" width="100">
+        </div>
+        <div class="col-xs-6">
+            <br>
+            {{ ong.name }}
+            &nbsp;<a id="like-button" href="#" data-id="{{ ong.pk }}"
+        </a>
+            <br>
+            <small>
+                <i class="fa fa-star c-star"></i>
+                <span id="fav-number">{{ ong.favourites }}</span>
+            </small>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block content %}
+
+    <script src="http://d3plus.org/js/d3.js"></script>
+    <script src="http://d3plus.org/js/d3plus.js"></script>
+
+    <div id="viz"></div>
+
+    <script>
+        var data = [
+            {"Mes": "Agosto", "id": "Esterilizaciones", "Cantidad": 100},
+            {"Mes": "Agosto", "id": "Adopciones", "Cantidad": 70},
+            {"Mes": "Septiembre", "id": "Esterilizaciones", "Cantidad": 80},
+            {"Mes": "Septiembre", "id": "Adopciones", "Cantidad": 40},
+            {"Mes": "Octubre", "id": "Esterilizaciones", "Cantidad": 40},
+            {"Mes": "Octubre", "id": "Adopciones", "Cantidad": 2},
+            {"Mes": "Noviembre", "id": "Esterilizaciones", "Cantidad": 20},
+            {"Mes": "Noviembre", "id": "Adopciones", "Cantidad": 10}
+        ];
+        var visualization = d3plus.viz()
+            .container("#viz")
+            .data(data)
+            .type("bar")
+            .x("Mes")
+            .y("Cantidad")
+            .draw()
+    </script>
+
+
+{% endblock %}

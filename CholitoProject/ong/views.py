@@ -95,8 +95,6 @@ class ONGCreateAnimalView(PermissionRequiredMixin, LoginRequiredMixin, View):
     def post(self, request, **kwargs):
         form = AnimalForm(request.POST, request.FILES, prefix='animal')
         image_form = ImageForm(request.POST, request.FILES, prefix='image')
-        print(form.is_valid())
-        print(form.cleaned_data)
         if form.is_valid():
             animal = form.save(commit=False)
             animal.ong = get_user_index(request.user).ong

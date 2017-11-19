@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 from municipality.models import Municipality
 
@@ -48,6 +49,7 @@ class Complaint(models.Model):
     gender = models.SmallIntegerField(choices=GENDER_OPTIONS, blank=True, null=True)
     wounded = models.NullBooleanField(choices=WOUND_OPTIONS, blank=True, default=None)
     color = models.TextField(max_length=50, blank=True)
+    sent = models.DateTimeField(default=timezone.now)
 
     # TODO: required?
     municipality = models.ForeignKey(Municipality)

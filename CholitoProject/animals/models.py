@@ -37,7 +37,7 @@ class Animal(models.Model):
     animal_type = models.ForeignKey(AnimalType)
     color = models.TextField(max_length=50)
     estimated_age = models.PositiveSmallIntegerField()
-    admission_date = models.DateTimeField(auto_now_add=True)
+    admission_date = models.DateTimeField()
     adoption_state = models.SmallIntegerField(choices=ADOPTION_OPTIONS,
                                               blank=1, null=1)
     is_sterilized = models.NullBooleanField(choices=STERILIZED_OPTIONS,

@@ -19,25 +19,33 @@
 
             getUserLocation(userPositionMarker, map);
             {% for ong in ongs %}
-            addMarker(map , {{ ong.lat }}, {{ ong.lng }}, "{{ ong.name }}" );
+            addMarker(map , {{ ong.lat }}, {{ ong.lng }}, "{{ ong.name }}", "{% url 'see-natural-ong' pk=ong.pk %}" );
             {% endfor %}
             {% for ong in liked_ongs %}
-            addCustomMarker(map , {{ ong.lat }}, {{ ong.lng }}, "{{ ong.name }}" );
+            addCustomMarker(map , {{ ong.lat }}, {{ ong.lng }}, "{{ ong.name }}", {{ ong.pk }}, "{% url 'see-natural-ong' pk=ong.pk %}" );
             {% endfor %}
           }
 
-          function addMarker(map, lat, lng, title){
+          function addMarker(map, lat, lng, title, url){
             var pos = {lat: lat, lng: lng};
             var marker = new google.maps.Marker({map: map, position : pos});
             var infowindow = new google.maps.InfoWindow({content : title});
             infowindow.open(map,marker);
+            marker.addListener('click', function() {
+                  window.location.href = url;
+                });
+
           }
 
-          function addCustomMarker(map, lat, lng, title){
+          function addCustomMarker(map, lat, lng, title, url){
             var pos = {lat: lat, lng: lng};
             var marker = new google.maps.Marker({map: map, position : pos, icon : "{% static 'images/star.png' %}"});
             var infowindow = new google.maps.InfoWindow({content : title});
             infowindow.open(map,marker);
+            marker.addListener('click', function() {
+                  window.location.href = url;
+                });
+
           }
 
           function getUserLocation(marker, map){

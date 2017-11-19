@@ -1,0 +1,63 @@
+{% extends "Ong/ong-standard.html" %}
+{% block title %}Ficha de {{ selected_animal.name }}{% endblock %}
+
+{% block content-header %}{{ selected_animal.name }}{% endblock %}
+
+{% block content %}
+    <!-- slider -->
+    <div class="row">
+        <div class="col-md-9" id="slider">
+            <!-- Top part of the slider -->
+            <div class="row">
+                <div class="col-md-3" id="carousel-bounding-box">
+                    <div id="myCarousel" class="carousel slide">
+                        <!-- Carousel items -->
+                        <div class="carousel-inner">
+
+                            <div class="item" id="slide0" data-slide-number="0">
+                                <img class="img-rounded img-responsive" src="{{ selected_animal.avatar.url }}">
+                            </div>
+
+                            {% for image in images %}
+
+                                <div class="item" data-slide-number="{{ forloop.counter0 }}">
+                                    <img class="img-rounded img-responsive" src="{{ image.image.url }}">
+                                </div>
+
+                            {% endfor %}
+
+                        </div><!--/carousel-inner-->
+                    </div><!--/carousel-->
+                    <ul class="carousel-controls-mini list-inline text-center">
+                        <li><a href="#myCarousel" data-slide="prev">‹</a></li>
+                        <li><a href="#myCarousel" data-slide="next">›</a></li>
+                    </ul><!--/carousel-controls-->
+                </div><!--/col-->
+                <div class="col-md-4" id="carousel-text"></div>
+
+            </div><!--/row-->
+        </div><!--/col-->
+    </div><!--/row slider-->
+
+    <script>
+        $(document).ready(function () {
+            jQuery("#slide0").addClass("active");
+        });
+    </script>
+
+
+    <p>Sexo: {{ selected_animal.get_gender_display }}</p>
+    <p>Tipo de animal: {{ selected_animal.animal_type }}</p>
+    <p>Edad estimada: {{ selected_animal.estimated_age }} años</p>
+    <p>Dias en adopcion: {{ adoptions_days }}</p>
+    <p>Color: {{ selected_animal.color }}</p>
+    <p>Descripcion: {{ selected_animal.description }}</p>
+
+    <br>
+    <br>
+
+    <a href="{% url 'edit-animal' selected_animal.id %}" type="button" class="btn btn-primary">
+    	Editar Animal 
+    </a>
+
+{% endblock %}

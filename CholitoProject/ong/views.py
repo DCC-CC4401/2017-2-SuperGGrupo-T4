@@ -147,16 +147,14 @@ class ONGEditAnimalView(PermissionRequiredMixin, LoginRequiredMixin, View):
     def get(self, request, pk, **kwargs):
         c_user = get_user_index(request.user)
         self.context['c_user'] = c_user
-
         animal = get_object_or_404(Animal, pk=pk)
+        self.context['admission_date'] = animal.admission_date.strftime("%Y-%m-%d")
         self.context['selected_animal'] = animal
         self.context['images'] = AnimalImage.objects.filter(animal=animal)
-        self.context['adoptions_days'] = (
-            timezone.now() - animal.admission_date).days
         return render(request, self.template_name, context=self.context)
 
 
-class ONGEditSterilizedStateView(PermissionRequiredMixin, LoginRequiredMixin,
+class ONGEUpdateAnimalView(PermissionRequiredMixin, LoginRequiredMixin,
                                  View):
     permission_required = 'ong.ong_user_access'
     template_name = 'edit_animal.html'
@@ -166,6 +164,21 @@ class ONGEditSterilizedStateView(PermissionRequiredMixin, LoginRequiredMixin,
         c_user = get_user_index(request.user)
         self.context['c_user'] = c_user
         animal = get_object_or_404(Animal, pk=pk)
-        animal.is_sterilized = request.POST.get('status')
+        if request.POST.get('gender') != "0":
+            animal.gender = request.POST.get('gender')
+        animal.estimated_age = request.POST.get('estimated_age')
+        animal.admission_date = request.POST.get('admission_date')
+        animal.color = request.POST.get('color')
+        animal.description = request.POST.get('description')
+        if request.POST.get('animal_type') != "0":
+            animal.animal_type = get_object_or_404(AnimalType, 
+                name=request.POST.get('animal_type'))
+        if request.POST.get('is_sterilized') != "0":
+            animal.is_sterilized = request.POST.get('is_sterilized')
+        if request.POST.get('adoption_state') != "0":
+            animal.adoption_state = request.POST.get('adoption_state')
+        if 'avatar' in request.FILES:
+            animal.avatar = request.FILES['avatar']
+
         animal.save()
         return redirect('edit-animal', pk=pk)

@@ -14,6 +14,7 @@ from naturalUser.forms import SignUpForm, AvatarForm
 from naturalUser.models import NaturalUser
 from ong.models import ONG
 
+
 class IndexView(TemplateView):
     context = {}
 

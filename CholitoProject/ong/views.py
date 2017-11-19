@@ -38,7 +38,7 @@ class ONGDispatcherView(View):
 
             dates = []
             date = datetime.date.today()
-            for i in range(3):
+            for i in range(3):  # last 3 months
                 dates.append(date)
                 date = date.replace(day=1) - datetime.timedelta(days=1)
 
@@ -50,12 +50,12 @@ class ONGDispatcherView(View):
                 admisions = len(
                     Animal.objects.filter(admission_date__year=date.year, admission_date__month=date.month,
                                           ong=ong))
-                # adoptions = len(Animal.objects.filter(adoption_date__year=today.year, adoption_date__month=today.year, ong__pk=1))
-                # sterilizations = len(Animal.objects.filter(sterilization_date__year=today.year, sterilization_date__month=today.year, ong__pk=1))
+                # adoptions = len(Animal.objects.filter(adoption_date__year=today.year, adoption_date__month=today.month, ong=ong))
+                # sterilizations = len(Animal.objects.filter(sterilized_date__year=today.year, sterilized_date__month=today.month, ong=ong))
 
                 data.append([month, 'Admisiones', admisions, position])
-                # data.append[month, 'Adopciones', adoptions]
-                # data.append[month, 'Esterilizaciones', sterilizations]
+                # data.append[month, 'Adopciones', adoptions, position]
+                # data.append[month, 'Esterilizaciones', sterilizations, position]
                 position += 1
 
             self.context['data'] = data

@@ -29,6 +29,8 @@ class NaturalUser(models.Model):
         not_liked = ONG.objects.exclude(pk__in=liked.values_list('pk', flat=True))
         context['liked_ongs'] = liked
         context['ongs'] = not_liked
+        print([ong.name for ong in liked])
+        print([ong.name for ong in not_liked])
         return render(request, 'index.html', context=context)
 
 

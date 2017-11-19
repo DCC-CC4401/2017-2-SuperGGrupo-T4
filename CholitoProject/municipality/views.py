@@ -11,7 +11,7 @@ class IndexView(PermissionRequiredMixin, LoginRequiredMixin, View):
     template_name = 'muni_complaints_main.html'
     context = {}
 
-    def getComplaintStats(self, complaints):
+    def get_complaint_stats(self, complaints):
         stats_complaint = {}
         status_parser = dict(Complaint().COMPLAINT_STATUS)
 
@@ -26,12 +26,11 @@ class IndexView(PermissionRequiredMixin, LoginRequiredMixin, View):
 
     def get(self, request, **kwargs):
         user = get_user_index(request.user)
-        complaints = Complaint.objects.filter(
-            municipality=user.municipality)
+        complaints = Complaint.objects.filter(municipality=user.municipality)
 
         self.context['complaints'] = complaints
         self.context['c_user'] = user
-        self.context['stats'] = self.getComplaintStats(complaints)
+        self.context['stats'] = self.get_complaint_stats(complaints)
         return render(request, self.template_name, context=self.context)
 
 

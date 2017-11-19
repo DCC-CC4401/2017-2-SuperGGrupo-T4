@@ -44,26 +44,93 @@
             jQuery("#slide0").addClass("active");
         });
     </script>
+    <form method="POST" enctype="multipart/form-data" action="{% url 'update-animal' selected_animal.pk %}">    
 
-    <!-- TODO: FIX, allow all fields to be modifiable -->
-    <p>Genero: {{ selected_animal.get_gender_display }}</p>
-    <p>Tipo de animal: {{ selected_animal.animal_type }}</p>
-    <p>Edad estimada: {{ selected_animal.estimated_age }} años</p>
-    <p>Dias en adopción: {{ adoptions_days }}</p>
-    <p>Color: {{ selected_animal.color }}</p>
-    <p>Descripción: {{ selected_animal.description }}</p>
-    <p>Estado Adopción: {{ selected_animal.get_adoption_state_display }}</p>
-    <p>Esterilizado: {{ selected_animal.get_is_sterilized_display }}</p>
-    <br>
-    <p>Actualizar estado esterilización</p>
-    <form method="POST" enctype="multipart/form-data" action="{% url 'update-animal' selected_animal.pk %}">
-        {% csrf_token %}
-        <select class="btn btn-default btn-lg" id="status" name="status">
-            <option value="True">Esterilizado</option>
-            <option value="False">No Esterilizado</option>
+    {% csrf_token %}
+
+    <div class="form-group">
+        <label class="control-label col-sm-10" for="case-input">Genero: 
+        {{ selected_animal.get_gender_display }}  
+        </label>
+        <div class="col-sm-10">
+            <select class="btn btn-default btn-lg" id="status" name="gender">
+                <option value="0">Actualizar Genero</option>
+                <option value="1">Macho</option>
+                <option value="2">Hembra</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- <div class="form-group">
+        <label class="control-label col-sm-10" for="case-input">Tipo de animal: 
+        {{ selected_animal.animal_type }}</label>
+            <div class="col-sm-10">
+                
+            </div>
+    </div> --> 
+    <div class="form-group">
+        <label class="control-label col-sm-10" for="case-input">Edad Estimada:</label>
+            <div class="col-sm-10">
+                <input type="number" name = "estimated_age" value = "{{ selected_animal.estimated_age }}"> 
+            </div>
+    </div>
+
+
+    <!-- <div class="form-group">
+        <label class="control-label col-sm-10" for="case-input">Fecha Ingreso:</label>
+        <div class="col-sm-10">
+            <input type="date" name = "admission_date" value = "{{ selected_animal.admission_date }}">
+        </div>
+    </div> -->
+
+    <div class="form-group">
+        <label class="control-label col-sm-10" for="case-input">Color:</label>
+        <div class="col-sm-10">
+            <input type="text" name="color" value="{{ selected_animal.color }}">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-sm-10" for="case-input">Descripcion:</label>
+        <div class="col-sm-10">
+            <input type="text" name = "description" value="{{ selected_animal.description }}">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-sm-10" for="case-input">Estado Adopción:
+        {{ selected_animal.get_adoption_state_display }}
+        </label>
+        <div class="col-sm-10">
+        <select class="btn btn-default btn-lg" id="status" name="adoption_state">
+            <option value="0">Actualizar estado</option>
+            <option value="1">En adopcion</option>
+            <option value="2">Procesando Solicitud Adopcion</option>
+            <option value="3">Adoptado</option>
         </select>
+        </div>
+    </div>
 
-        <button type="submit" class="btn btn-primary btn-lg">Actualizar Estado Esterilización</button>
+
+    <div class="form-group">
+        <label class="control-label col-sm-10" for="case-input">Estiirilizado:
+        {{ selected_animal.get_is_sterilized_display }}
+        </label>
+        <div class="col-sm-10">
+        <select class="btn btn-default btn-lg" id="status" name="is_sterilized">
+            <option value="0">Actualizar estado</option>
+            <option value="True">Esterilizado</option>
+            <option value="False">No Esterilizado</option>>
+        </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+            <div class="col-sm-10">
+                <br>
+                <input type="submit" class="btn btn-primary" value="Editar Datos"/>
+            </div>
+        </div>
     </form>
 
 {% endblock %}

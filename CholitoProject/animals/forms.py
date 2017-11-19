@@ -28,7 +28,7 @@ class AnimalForm(forms.ModelForm):
                 attrs={'id': 'estimated_age-input'}),
             'description': forms.TextInput(attrs={'id': 'description-input'}),
             'is_sterilized': forms.Select(attrs={'id': 'is_sterilized-input'}),
-            'admission_date': forms.widgets.DateInput(attrs={'type': 'date'}),#forms.SelectDateWidget(attrs={'id': 'admission_date_input'}),
+            'admission_date': forms.widgets.DateInput(attrs={'id': 'admission_date_input', 'type': 'date'}),
             'avatar': forms.FileInput(attrs={'id': 'avatar-input'})
         }
 

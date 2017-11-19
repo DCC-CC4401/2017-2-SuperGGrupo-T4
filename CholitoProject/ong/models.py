@@ -10,7 +10,7 @@ class ONG(models.Model):
     # is this really needed?
     directions = models.TextField(max_length=200, null=True)
     avatar = models.ImageField(upload_to='ong/avatar/')
-    favourites = models.IntegerField()
+    favourites = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name

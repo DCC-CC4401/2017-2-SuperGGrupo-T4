@@ -6,12 +6,11 @@ from django.utils import timezone
 from django.views import View
 
 from CholitoProject.userManager import get_user_index
+from animals.forms import AnimalForm, ImageForm
 from animals.models import Animal, AnimalImage
 from complaint.models import AnimalType
 from naturalUser.models import ONGLike, NaturalUser
 from ong.models import ONG
-from animals.models import Animal, Adopt, AnimalImage
-from animals.forms import AnimalForm, ImageForm
 
 
 # TODO: use adopt.animal.ong == this_ong to load a notification tab with pending adoptions
@@ -90,11 +89,11 @@ class ONGAddAnimalView(PermissionRequiredMixin, LoginRequiredMixin, View):
         return render(request, self.template_name, context=self.context)
 
 
-class ONGcreateAnimalView(PermissionRequiredMixin, LoginRequiredMixin, View):
+class ONGCreateAnimalView(PermissionRequiredMixin, LoginRequiredMixin, View):
     permission_required = 'ong.ong_user_access'
 
     def post(self, request, **kwargs):
-        form = AnimalForm(request.POST, prefix='animal')
+        form = AnimalForm(request.POST, request.FILES, prefix='animal')
         image_form = ImageForm(request.POST, request.FILES, prefix='image')
         if form.is_valid():
             animal = form.save(commit=False)
@@ -102,8 +101,9 @@ class ONGcreateAnimalView(PermissionRequiredMixin, LoginRequiredMixin, View):
             animal.save()
             if image_form.is_valid():
                 AnimalImage.objects.create(
-                    animal=animal, image = image_form.cleaned_data.get('animal_image'))
-        return redirect('ong-index');
+                    animal=animal,
+                    image=image_form.cleaned_data.get('animal_image'))
+        return redirect('ong-index')
 
 
 class ONGRequestsView(PermissionRequiredMixin, LoginRequiredMixin, View):

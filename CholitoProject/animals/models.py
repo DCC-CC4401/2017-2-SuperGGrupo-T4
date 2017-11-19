@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 from complaint.models import Complaint, AnimalType
 from naturalUser.models import NaturalUser
@@ -32,18 +33,18 @@ class Animal(models.Model):
     )
 
     name = models.TextField(max_length=100)
-    gender = models.SmallIntegerField(choices=GENDER_OPTIONS)
+    gender = models.SmallIntegerField(choices=GENDER_OPTIONS, default=1)
     description = models.TextField(max_length=1000)
     animal_type = models.ForeignKey(AnimalType)
     color = models.TextField(max_length=50)
     estimated_age = models.PositiveSmallIntegerField()
-    admission_date = models.DateTimeField()
+    admission_date = models.DateField(default=timezone.now)
     adoption_state = models.SmallIntegerField(choices=ADOPTION_OPTIONS,
-                                              blank=1, null=1)
-    is_sterilized = models.NullBooleanField(choices=STERILIZED_OPTIONS,
-                                            blank=False, null=False)
+                                              default=1)
+    is_sterilized = models.BooleanField(choices=STERILIZED_OPTIONS,
+                                        default=False)
     ong = models.ForeignKey(ONG, on_delete=models.CASCADE)
-    avatar = models.ImageField(default=default_avatar, upload_to="animals/")
+    avatar = models.ImageField(default=default_avatar, upload_to="animals/", blank=True)
 
     def __str__(self):
         return self.name + " - " + self.animal_type.name

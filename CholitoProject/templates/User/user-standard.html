@@ -55,19 +55,19 @@
                     </ul>
                 </li>
                 <li>
-                    <a href={% url 'complaint-form' %} style="background-color: #222d32;">
+                    <a href="{% url 'complaint-form' %}" style="background-color: #222d32;">
                         <i class="fa fa-bullhorn"></i>
                         <span>Denunciar</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#" style="background-color: #222d32;">
+                    <a href="{% url 'show-ong' %}" style="background-color: #222d32;">
                         <i class="fa fa-star"></i>
                         <span>ONG</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{% url 'see-animal' 1 %}" style="background-color: #222d32;">
+                    <a href="{% url 'show-animals' %}" style="background-color: #222d32;">
                         <i class="fa fa-paw"></i>
                         <span>Animales en Adopción</span>
                     </a>
@@ -96,7 +96,7 @@
                     <h4 class="modal-title" id="myModalLabel">Perfil</h4>
                 </div>
                 <div class="modal-body">
-                    <form action="/user/" method="POST" enctype="multipart/form-data">
+                    <form action="{% url 'user-update' %}" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="form-group">
                             <label for="user_first_name">Nombre</label>

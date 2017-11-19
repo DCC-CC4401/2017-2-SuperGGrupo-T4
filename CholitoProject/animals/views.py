@@ -17,7 +17,7 @@ class AnimalRenderView(View):
         self.context['selected_animal'] = animal
         self.context['images'] = AnimalImage.objects.filter(animal=animal)
         self.context['adoptions_days'] = (
-            timezone.now() - animal.admission_date).days
+            timezone.now().date() - animal.admission_date).days
         c_user = get_user_index(request.user)
         if c_user:
             self.context['c_user'] = c_user

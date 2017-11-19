@@ -43,8 +43,8 @@ class Animal(models.Model):
                                               default=1)
     is_sterilized = models.BooleanField(choices=STERILIZED_OPTIONS,
                                         default=False)
-    sterilized_date = models.DateField()
-    adoption_date = models.DateField()
+    sterilized_date = models.DateField(null=True)
+    adoption_date = models.DateField(null=True)
     ong = models.ForeignKey(ONG, on_delete=models.CASCADE)
     avatar = models.ImageField(default=default_avatar, upload_to="animals/", blank=True)
 

@@ -100,9 +100,11 @@ class ONGCreateAnimalView(PermissionRequiredMixin, LoginRequiredMixin, View):
             animal.ong = get_user_index(request.user).ong
             animal.save()
             if image_form.is_valid():
-                AnimalImage.objects.create(
-                    animal=animal,
-                    image=image_form.cleaned_data.get('animal_image'))
+                animal_extra_image = image_form.cleaned_data.get('animal_image')
+                if animal_extra_image:
+                    AnimalImage.objects.create(
+                        animal=animal,
+                        image=animal_extra_image)
         return redirect('ong-index')
 
 
@@ -152,7 +154,7 @@ class ONGEditAnimalView(PermissionRequiredMixin, LoginRequiredMixin, View):
         self.context['selected_animal'] = animal
         self.context['images'] = AnimalImage.objects.filter(animal=animal)
         self.context['adoptions_days'] = (
-            timezone.now() - animal.admission_date).days
+            timezone.now().date() - animal.admission_date).days
         return render(request, self.template_name, context=self.context)
 
 

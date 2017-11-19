@@ -50,12 +50,14 @@ class ONGDispatcherView(View):
                 admisions = len(
                     Animal.objects.filter(admission_date__year=date.year, admission_date__month=date.month,
                                           ong=ong))
-                # adoptions = len(Animal.objects.filter(adoption_date__year=today.year, adoption_date__month=today.month, ong=ong))
-                # sterilizations = len(Animal.objects.filter(sterilized_date__year=today.year, sterilized_date__month=today.month, ong=ong))
+                adoptions = len(Animal.objects.filter(adoption_date__year=date.year, adoption_date__month=date.month,
+                                                      ong=ong))
+                sterilizations = len(Animal.objects.filter(sterilized_date__year=date.year,
+                                                           sterilized_date__month=date.month, ong=ong))
 
                 data.append([month, 'Admisiones', admisions, position])
-                # data.append[month, 'Adopciones', adoptions, position]
-                # data.append[month, 'Esterilizaciones', sterilizations, position]
+                data.append([month, 'Adopciones', adoptions, position])
+                data.append([month, 'Esterilizaciones', sterilizations, position])
                 position += 1
 
             self.context['data'] = data

@@ -5,6 +5,39 @@
 {% block content-header %}Subir Denuncia{% endblock %}
 
 {% block content %}
+<script>
+    $( document ).ready(function() {
+        getUserLocation();
+          function getUserLocation(){
+            // Try HTML5 geolocation.
+            if (navigator.geolocation) {
+              navigator.geolocation.getCurrentPosition(function(position) {
+                var pos = {
+                  lat: position.coords.latitude,
+                  lng: position.coords.longitude
+                };
+
+                document.getElementById("id_complaint-lat").value = pos.lat;
+                document.getElementById("id_complaint-lng").value = pos.lng;
+
+              }, function() {
+                handleLocationError(true);
+              });
+            } else {
+              // Browser doesn't support Geolocation
+              handleLocationError(false);
+            }
+          }
+
+          function handleLocationError(browserHasGeolocation) {
+            console.log(browserHasGeolocation);
+            if (!browserHasGeolocation){
+                alert("No hemos podido acceder a tu ubicación, te mostraremos información cerca a Santiago");
+            }
+        }
+});
+
+        </script>
     <form method="POST" enctype="multipart/form-data" action="{% url 'make-complaint' %}">
 
         {% csrf_token %}

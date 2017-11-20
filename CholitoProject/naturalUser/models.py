@@ -26,13 +26,11 @@ class NaturalUser(models.Model):
 
     def get_index(self, request, context=None):
         liked = context['ongs'].filter(onglike__natural_user=self)
-        not_liked = context['ongs'].exclude(pk__in=liked.values_list('pk', flat=True))
+        not_liked = context['ongs'].exclude(
+            pk__in=liked.values_list('pk', flat=True))
         context['liked_ongs'] = liked
         context['ongs'] = not_liked
-        print([ong.name for ong in liked])
-        print([ong.name for ong in not_liked])
         return render(request, 'index.html', context=context)
-
 
 
 class ONGLike(models.Model):

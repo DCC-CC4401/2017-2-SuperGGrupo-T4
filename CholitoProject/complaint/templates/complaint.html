@@ -17,8 +17,8 @@
                   lng: position.coords.longitude
                 };
 
-                document.getElementById("id_complaint-lat").value = pos.lat;
-                document.getElementById("id_complaint-lng").value = pos.lng;
+                document.getElementById("id_complaint-lat").value = Math.round(pos.lat * 10000000) / 100000000;
+                document.getElementById("id_complaint-lng").value = Math.round(pos.lng * 10000000) / 100000000;
 
                 var geocoder = new google.maps.Geocoder;
                 geocodeLatLng(geocoder, pos);

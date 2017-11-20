@@ -28,14 +28,13 @@ class ONGDispatcherView(View):
         ong = get_object_or_404(ONG, pk=pk)
         self.context['ong'] = ong
 
-
         if c_user is None or c_user.user.has_perm('naturalUser.natural_user_access'):
-            self.template_name = 'natural_user_ong.html'
             animals = Animal.objects.filter(ong_id=pk, adoption_state=1)
             self.context['ong_animals'] = animals
             liked = ONGLike.objects.filter(natural_user=c_user,
                                            ong=ong).exists()
             self.context['liked'] = liked
+            return render(request, 'natural_user_ong.html', context=self.context)
 
         elif c_user.user.has_perm('municipality.municipality_user_access'):
 
@@ -47,7 +46,6 @@ class ONGDispatcherView(View):
                 dates.append(date)
                 date = date.replace(day=1) - datetime.timedelta(days=1)
 
-            # [month, id, quantity, position] = ['enero', 'Esterilizaciones', 80, 1]
             data = []
             position = 0
             for date in reversed(dates):
@@ -79,9 +77,11 @@ class ONGDispatcherView(View):
             self.context['sterilized'] = sterilized
 
             self.context['data'] = data
-            self.template_name = 'municipality_user_ong.html'
 
-        return render(request, self.template_name, context=self.context)
+            return render(request, 'municipality_user_ong.html',
+                          context=self.context)
+
+        return render(request, 'index.html', context=self.context)
 
 
 class ONGIndexView(PermissionRequiredMixin, LoginRequiredMixin, View):

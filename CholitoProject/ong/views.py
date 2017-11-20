@@ -47,18 +47,24 @@ class ONGDispatcherView(View):
             position = 0
             for date in reversed(dates):
                 month = calendar.month_name[date.month]
-                admisions = len(
-                    Animal.objects.filter(admission_date__year=date.year, admission_date__month=date.month,
-                                          ong=ong))
-                adoptions = len(Animal.objects.filter(adoption_date__year=date.year, adoption_date__month=date.month,
-                                                      ong=ong))
-                sterilizations = len(Animal.objects.filter(sterilized_date__year=date.year,
-                                                           sterilized_date__month=date.month, ong=ong))
+                admisions =Animal.objects.filter(admission_date__year=date.year, admission_date__month=date.month,
+                                          ong=ong).count()
+                adoptions = Animal.objects.filter(adoption_date__year=date.year, adoption_date__month=date.month,
+                                                      ong=ong).count()
+                sterilizations = Animal.objects.filter(sterilized_date__year=date.year,
+                                                           sterilized_date__month=date.month, ong=ong).count()
 
                 data.append([month, 'Admisiones', admisions, position])
                 data.append([month, 'Adopciones', adoptions, position])
                 data.append([month, 'Esterilizaciones', sterilizations, position])
                 position += 1
+
+            admitted = Animal.objects.filter(ong=ong).count()
+            self.context['admitted'] = admitted
+            adopted = Animal.objects.filter(ong=ong, adoption_state=3).count()
+            self.context['adopted'] = adopted
+            sterilized = Animal.objects.filter(ong=ong, is_sterilized=True).count()
+            self.context['sterilized'] = sterilized
 
             self.context['data'] = data
             self.template_name = 'municipality_user_ong.html'
@@ -95,7 +101,51 @@ class ONGAdoptedView(PermissionRequiredMixin, LoginRequiredMixin, View):
 
 class ONGStatisticsView(PermissionRequiredMixin, LoginRequiredMixin, View):
     permission_required = 'ong.ong_user_access'
-    pass
+    template_name = 'ong_statistics.html'
+    context = {}
+
+    def get(self, request, **kwargs):
+        c_user = get_user_index(request.user)
+        self.context['c_user'] = c_user
+        ong = c_user.ong
+        self.context['ong'] = ong
+
+        locale.setlocale(locale.LC_TIME, '')
+
+        dates = []
+        date = datetime.date.today()
+        for i in range(3):  # last 3 months
+            dates.append(date)
+            date = date.replace(day=1) - datetime.timedelta(days=1)
+
+        # [month, id, quantity, position] = ['enero', 'Esterilizaciones', 80, 1]
+        data = []
+        position = 0
+        for date in reversed(dates):
+            month = calendar.month_name[date.month]
+            admisions = Animal.objects.filter(admission_date__year=date.year, admission_date__month=date.month,
+                                      ong=ong).count()
+            adoptions = Animal.objects.filter(adoption_date__year=date.year, adoption_date__month=date.month,
+                                                  ong=ong).count()
+            sterilizations = Animal.objects.filter(sterilized_date__year=date.year,
+                                                       sterilized_date__month=date.month, ong=ong).count()
+
+            data.append([month, 'Admisiones', admisions, position])
+            data.append([month, 'Adopciones', adoptions, position])
+            data.append([month, 'Esterilizaciones', sterilizations, position])
+            position += 1
+
+        self.context['data'] = data
+
+        admitted = Animal.objects.filter(ong=ong).count()
+        self.context['admitted'] = admitted
+        adopted = Animal.objects.filter(ong=ong, adoption_state=3).count()
+        self.context['adopted'] = adopted
+        sterilized = Animal.objects.filter(ong=ong, is_sterilized=True).count()
+        self.context['sterilized'] = sterilized
+
+        return render(request, self.template_name, context=self.context)
+
 
 
 class ONGEditView(PermissionRequiredMixin, LoginRequiredMixin, View):

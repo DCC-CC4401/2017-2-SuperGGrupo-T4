@@ -1,27 +1,10 @@
-{% extends 'Municipality/municipality-standard.html' %}
-
-{% block title %}{{ ong.name }}{% endblock %}
-
-{% block content-header %}
-    <div class="row">
-        <div class="c-fundacion-title">
-            <img src="{{ ong.avatar.url }}" class="user-image" width="100">
-        </div>
-        <div class="col-xs-6">
-            <br>
-            {{ ong.name }}
-            <br>
-            <small>
-                <i class="fa fa-star c-star"></i>
-                <span id="fav-number">{{ ong.favourites }}</span>
-            </small>
-        </div>
-    </div>
-
-{% endblock %}
+{% extends "Ong/ong-standard.html" %}
+{% block title %}Estadísticas de {{ ong.name }}{% endblock %}
+{% block content-header %}Estadísticas de {{ ong.name }}{% endblock %}
 
 {% block content %}
-    <script src="http://d3plus.org/js/d3.js"></script>
+
+        <script src="http://d3plus.org/js/d3.js"></script>
     <script src="http://d3plus.org/js/d3plus.js"></script>
 
     <div id="viz"></div>

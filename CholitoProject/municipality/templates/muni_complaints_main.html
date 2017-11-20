@@ -4,30 +4,76 @@
 {% block content-header %}Denuncias{% endblock %}
 
 {% block content %}
-    <div id="chart_div"></div>
-    <br>
-    <table class="table table-hover">
-        <thead>
-        <tr>
-            <th>Tipo Denuncia</th>
-            <th>Animal</th>
-            <th>Dirección</th>
-            <th>Herido</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for complaint in complaints %}
-            <tr class="clickable-row" data-href="{% url 'see-complaint' complaint.pk %}">
-                <th>{{ complaint.get_case_display }}</th>
-                <th>{{ complaint.animal_type }}</th>
-                <th>{{ complaint.directions }}</th>
-                <th>{{ complaint.get_wounded_display }}</th>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
 
-    
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
+
+    <!-- TODO: not responsive -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="box">
+                <div class="box-body">
+                    <div id="chart_div"></div>
+                    <br>
+
+                    <table id="complaint-table" class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>Tipo Denuncia</th>
+                            <th>Animal</th>
+                            <th>Dirección</th>
+                            <th>Herido</th>
+                            <th>Fecha</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for complaint in complaints %}
+                            <tr class="clickable-row" data-href="{% url 'see-complaint' complaint.pk %}">
+                                <td style="vertical-align:middle;">{{ complaint.get_case_display }}</td>
+                                <td style="vertical-align:middle;">{{ complaint.animal_type }}</td>
+                                <td style="vertical-align:middle;">{{ complaint.directions }}</td>
+                                <td style="vertical-align:middle;">{{ complaint.get_wounded_display }}</td>
+                                <td style="vertical-align:middle;">{{ complaint.sent }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#complaint-table').DataTable({
+                "order": [[ 4, "asc" ]],
+                language: {
+                    "decimal": "",
+                    "emptyTable": "No hay datos disponibles para la tabla",
+                    "info": "_START_ - _END_ de _TOTAL_ entradas",
+                    "infoEmpty": "Sin resultados",
+                    "infoFiltered": "(Filtrado de un total de _MAX_ entradas)",
+                    "infoPostFix": "",
+                    "thousands": ".",
+                    "lengthMenu": "Mostrar _MENU_ entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "No hay resultados que coincidan con la busqueda",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Último",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    },
+                    "aria": {
+                        "sortAscending": ": activate to sort column ascending",
+                        "sortDescending": ": activate to sort column descending"
+                    }
+                }
+            })
+        });
+    </script>
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script>
@@ -39,31 +85,31 @@
     </script>
     <script type="text/javascript">
         google.charts.load('current', {packages: ['corechart', 'bar']});
-google.charts.setOnLoadCallback(drawStacked);
+        google.charts.setOnLoadCallback(drawStacked);
 
-function drawStacked() {
-      var data = google.visualization.arrayToDataTable([
-        ['Tipo de Denuncia', 'Cantidad de Denucias'],
-        {% for key, value in stats.items %} 
-            ["{{key}}", {{value}}],
-        {% endfor %}
-      ]);
+        function drawStacked() {
+            var data = google.visualization.arrayToDataTable([
+                ['Tipo de Denuncia', 'Cantidad de Denucias'],
+                {% for key, value in stats.items %}
+                    ["{{key}}", {{value}}],
+                {% endfor %}
+            ]);
 
-      var options = {
-        title: 'Estadisticas de denuncias emitidas',
-        chartArea: {width: '50%'},
-        isStacked: true,
-        hAxis: {
-          title: 'Cantidad de denuncias',
-          minValue: 0,
-        },
-        vAxis: {
-          title: 'Estados de Denuncia'
+            var options = {
+                title: 'Estadisticas de denuncias emitidas',
+                chartArea: {width: '50%'},
+                isStacked: true,
+                hAxis: {
+                    title: 'Cantidad de denuncias',
+                    minValue: 0,
+                },
+                vAxis: {
+                    title: 'Estados de Denuncia'
+                }
+            };
+            var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
         }
-      };
-      var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
-      chart.draw(data, options);
-    }
     </script>
 
 {% endblock %}

@@ -21,9 +21,9 @@ class AnimalRenderView(View):
         c_user = get_user_index(request.user)
         if c_user:
             self.context['c_user'] = c_user
-            adopt_users_pk = [adopt.user.pk for adopt in
-                              Adopt.objects.filter(animal=animal)]
-            self.context['is_adopter'] = c_user.pk in adopt_users_pk
+            is_adopter = Adopt.objects.filter(animal=animal,
+                                              user=c_user).exists()
+            self.context['is_adopter'] = is_adopter
 
         return render(request, self.template_name, context=self.context)
 

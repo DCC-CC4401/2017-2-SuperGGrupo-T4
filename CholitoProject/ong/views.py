@@ -60,6 +60,13 @@ class ONGDispatcherView(View):
                 data.append([month, 'Esterilizaciones', sterilizations, position])
                 position += 1
 
+            admitted = len(Animal.objects.filter(ong=ong))
+            self.context['admitted'] = admitted
+            adopted = len(Animal.objects.filter(ong=ong, adoption_state=3))
+            self.context['adopted'] = adopted
+            sterilized = len(Animal.objects.filter(ong=ong, is_sterilized=True))
+            self.context['sterilized'] = sterilized
+
             self.context['data'] = data
             self.template_name = 'municipality_user_ong.html'
 

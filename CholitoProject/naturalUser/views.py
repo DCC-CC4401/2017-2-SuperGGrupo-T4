@@ -28,8 +28,6 @@ class IndexView(TemplateView):
 
         if "age" in request.GET:
             age_gt, age_lt =  tuple(request.GET["age"].split("-"))
-            print(age_gt)
-            print(age_lt)
             ongs = ongs.filter(animal__estimated_age__lte=age_lt, animal__estimated_age__gte=age_gt)
 
 

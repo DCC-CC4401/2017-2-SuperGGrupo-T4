@@ -47,24 +47,23 @@ class ONGDispatcherView(View):
             position = 0
             for date in reversed(dates):
                 month = calendar.month_name[date.month]
-                admisions = len(
-                    Animal.objects.filter(admission_date__year=date.year, admission_date__month=date.month,
-                                          ong=ong))
-                adoptions = len(Animal.objects.filter(adoption_date__year=date.year, adoption_date__month=date.month,
-                                                      ong=ong))
-                sterilizations = len(Animal.objects.filter(sterilized_date__year=date.year,
-                                                           sterilized_date__month=date.month, ong=ong))
+                admisions =Animal.objects.filter(admission_date__year=date.year, admission_date__month=date.month,
+                                          ong=ong).count()
+                adoptions = Animal.objects.filter(adoption_date__year=date.year, adoption_date__month=date.month,
+                                                      ong=ong).count()
+                sterilizations = Animal.objects.filter(sterilized_date__year=date.year,
+                                                           sterilized_date__month=date.month, ong=ong).count()
 
                 data.append([month, 'Admisiones', admisions, position])
                 data.append([month, 'Adopciones', adoptions, position])
                 data.append([month, 'Esterilizaciones', sterilizations, position])
                 position += 1
 
-            admitted = len(Animal.objects.filter(ong=ong))
+            admitted = Animal.objects.filter(ong=ong).count()
             self.context['admitted'] = admitted
-            adopted = len(Animal.objects.filter(ong=ong, adoption_state=3))
+            adopted = Animal.objects.filter(ong=ong, adoption_state=3).count()
             self.context['adopted'] = adopted
-            sterilized = len(Animal.objects.filter(ong=ong, is_sterilized=True))
+            sterilized = Animal.objects.filter(ong=ong, is_sterilized=True).count()
             self.context['sterilized'] = sterilized
 
             self.context['data'] = data
@@ -124,13 +123,12 @@ class ONGStatisticsView(PermissionRequiredMixin, LoginRequiredMixin, View):
         position = 0
         for date in reversed(dates):
             month = calendar.month_name[date.month]
-            admisions = len(
-                Animal.objects.filter(admission_date__year=date.year, admission_date__month=date.month,
-                                      ong=ong))
-            adoptions = len(Animal.objects.filter(adoption_date__year=date.year, adoption_date__month=date.month,
-                                                  ong=ong))
-            sterilizations = len(Animal.objects.filter(sterilized_date__year=date.year,
-                                                       sterilized_date__month=date.month, ong=ong))
+            admisions = Animal.objects.filter(admission_date__year=date.year, admission_date__month=date.month,
+                                      ong=ong).count()
+            adoptions = Animal.objects.filter(adoption_date__year=date.year, adoption_date__month=date.month,
+                                                  ong=ong).count()
+            sterilizations = Animal.objects.filter(sterilized_date__year=date.year,
+                                                       sterilized_date__month=date.month, ong=ong).count()
 
             data.append([month, 'Admisiones', admisions, position])
             data.append([month, 'Adopciones', adoptions, position])
@@ -139,11 +137,11 @@ class ONGStatisticsView(PermissionRequiredMixin, LoginRequiredMixin, View):
 
         self.context['data'] = data
 
-        admitted = len(Animal.objects.filter(ong=ong))
+        admitted = Animal.objects.filter(ong=ong).count()
         self.context['admitted'] = admitted
-        adopted = len(Animal.objects.filter(ong=ong, adoption_state=3))
+        adopted = Animal.objects.filter(ong=ong, adoption_state=3).count()
         self.context['adopted'] = adopted
-        sterilized = len(Animal.objects.filter(ong=ong, is_sterilized=True))
+        sterilized = Animal.objects.filter(ong=ong, is_sterilized=True).count()
         self.context['sterilized'] = sterilized
 
         return render(request, self.template_name, context=self.context)

@@ -27,9 +27,9 @@ class IndexView(TemplateView):
             ongs = ongs.filter(animal__animal_type=animal_type)
 
         if "age" in request.GET:
-            age_gt, age_lt =  tuple(request.GET["age"].split("-"))
-            ongs = ongs.filter(animal__estimated_age__lte=age_lt, animal__estimated_age__gte=age_gt)
-
+            age_gt, age_lt = tuple(request.GET["age"].split("-"))
+            ongs = ongs.filter(animal__estimated_age__lte=age_lt,
+                               animal__estimated_age__gte=age_gt)
 
         c_user = get_user_index(request.user)
         self.context['c_user'] = c_user
@@ -38,6 +38,7 @@ class IndexView(TemplateView):
 
         self.context['ongs'] = ongs
         if c_user is None:
+            self.context['liked_ongs'] = None
             return render(request, 'index.html', context=self.context)
         return c_user.get_index(request, context=self.context)
 
@@ -107,7 +108,8 @@ class ONGListView(View):
         self.context['c_user'] = c_user
         animals = AnimalType.objects.all()
         self.context['animals'] = animals
-        ong = ONG.objects.filter(animal__adoption_state=1).annotate(animals=Count('animal'))
+        ong = ONG.objects.filter(animal__adoption_state=1).annotate(
+            animals=Count('animal'))
         self.context['all_ong'] = ong
         return render(request, self.template_name, context=self.context)
 

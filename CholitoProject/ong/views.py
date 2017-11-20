@@ -28,13 +28,15 @@ class ONGDispatcherView(View):
         ong = get_object_or_404(ONG, pk=pk)
         self.context['ong'] = ong
 
-        if c_user is None or c_user.user.has_perm('naturalUser.natural_user_access'):
+        if c_user is None or c_user.user.has_perm(
+                'naturalUser.natural_user_access'):
             animals = Animal.objects.filter(ong_id=pk, adoption_state=1)
             self.context['ong_animals'] = animals
             liked = ONGLike.objects.filter(natural_user=c_user,
                                            ong=ong).exists()
             self.context['liked'] = liked
-            return render(request, 'natural_user_ong.html', context=self.context)
+            return render(request, 'natural_user_ong.html',
+                          context=self.context)
 
         elif c_user.user.has_perm('municipality.municipality_user_access'):
 
@@ -104,11 +106,6 @@ class ONGIndexView(PermissionRequiredMixin, LoginRequiredMixin, View):
         self.context['c_user'] = user
 
         return render(request, self.template_name, context=self.context)
-
-
-class ONGAdoptedView(PermissionRequiredMixin, LoginRequiredMixin, View):
-    permission_required = 'ong.ong_user_access'
-    pass
 
 
 class ONGStatisticsView(PermissionRequiredMixin, LoginRequiredMixin, View):

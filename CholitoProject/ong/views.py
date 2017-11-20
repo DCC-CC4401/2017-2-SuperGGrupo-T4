@@ -1,4 +1,7 @@
-import locale, datetime, calendar
+import calendar
+import datetime
+import locale
+
 from django.contrib.auth.mixins import PermissionRequiredMixin, \
     LoginRequiredMixin
 from django.http import HttpResponse
@@ -17,7 +20,6 @@ from ong.models import ONG
 # TODO: use adopt.animal.ong == this_ong to load a notification tab with pending adoptions
 
 class ONGDispatcherView(View):
-
     context = {'animals': AnimalType.objects.all()}
 
     def get(self, request, pk, **kwargs):
@@ -25,11 +27,14 @@ class ONGDispatcherView(View):
         self.context['c_user'] = c_user
         ong = get_object_or_404(ONG, pk=pk)
         self.context['ong'] = ong
-        if c_user.user.has_perm('naturalUser.natural_user_access'):
+
+
+        if c_user is None or c_user.user.has_perm('naturalUser.natural_user_access'):
             self.template_name = 'natural_user_ong.html'
             animals = Animal.objects.filter(ong_id=pk, adoption_state=1)
             self.context['ong_animals'] = animals
-            liked = ONGLike.objects.filter(natural_user=c_user, ong=ong).exists()
+            liked = ONGLike.objects.filter(natural_user=c_user,
+                                           ong=ong).exists()
             self.context['liked'] = liked
 
         elif c_user.user.has_perm('municipality.municipality_user_access'):
@@ -47,23 +52,30 @@ class ONGDispatcherView(View):
             position = 0
             for date in reversed(dates):
                 month = calendar.month_name[date.month]
-                admisions =Animal.objects.filter(admission_date__year=date.year, admission_date__month=date.month,
-                                          ong=ong).count()
-                adoptions = Animal.objects.filter(adoption_date__year=date.year, adoption_date__month=date.month,
-                                                      ong=ong).count()
-                sterilizations = Animal.objects.filter(sterilized_date__year=date.year,
-                                                           sterilized_date__month=date.month, ong=ong).count()
+                admisions = Animal.objects.filter(
+                    admission_date__year=date.year,
+                    admission_date__month=date.month,
+                    ong=ong).count()
+                adoptions = Animal.objects.filter(
+                    adoption_date__year=date.year,
+                    adoption_date__month=date.month,
+                    ong=ong).count()
+                sterilizations = Animal.objects.filter(
+                    sterilized_date__year=date.year,
+                    sterilized_date__month=date.month, ong=ong).count()
 
                 data.append([month, 'Admisiones', admisions, position])
                 data.append([month, 'Adopciones', adoptions, position])
-                data.append([month, 'Esterilizaciones', sterilizations, position])
+                data.append(
+                    [month, 'Esterilizaciones', sterilizations, position])
                 position += 1
 
             admitted = Animal.objects.filter(ong=ong).count()
             self.context['admitted'] = admitted
             adopted = Animal.objects.filter(ong=ong, adoption_state=3).count()
             self.context['adopted'] = adopted
-            sterilized = Animal.objects.filter(ong=ong, is_sterilized=True).count()
+            sterilized = Animal.objects.filter(ong=ong,
+                                               is_sterilized=True).count()
             self.context['sterilized'] = sterilized
 
             self.context['data'] = data
@@ -123,12 +135,15 @@ class ONGStatisticsView(PermissionRequiredMixin, LoginRequiredMixin, View):
         position = 0
         for date in reversed(dates):
             month = calendar.month_name[date.month]
-            admisions = Animal.objects.filter(admission_date__year=date.year, admission_date__month=date.month,
-                                      ong=ong).count()
-            adoptions = Animal.objects.filter(adoption_date__year=date.year, adoption_date__month=date.month,
-                                                  ong=ong).count()
-            sterilizations = Animal.objects.filter(sterilized_date__year=date.year,
-                                                       sterilized_date__month=date.month, ong=ong).count()
+            admisions = Animal.objects.filter(admission_date__year=date.year,
+                                              admission_date__month=date.month,
+                                              ong=ong).count()
+            adoptions = Animal.objects.filter(adoption_date__year=date.year,
+                                              adoption_date__month=date.month,
+                                              ong=ong).count()
+            sterilizations = Animal.objects.filter(
+                sterilized_date__year=date.year,
+                sterilized_date__month=date.month, ong=ong).count()
 
             data.append([month, 'Admisiones', admisions, position])
             data.append([month, 'Adopciones', adoptions, position])
@@ -145,7 +160,6 @@ class ONGStatisticsView(PermissionRequiredMixin, LoginRequiredMixin, View):
         self.context['sterilized'] = sterilized
 
         return render(request, self.template_name, context=self.context)
-
 
 
 class ONGEditView(PermissionRequiredMixin, LoginRequiredMixin, View):
@@ -186,7 +200,8 @@ class ONGCreateAnimalView(PermissionRequiredMixin, LoginRequiredMixin, View):
                 animal.sterilized_date = timezone.now()
             animal.save()
             if image_form.is_valid():
-                animal_extra_image = image_form.cleaned_data.get('animal_image')
+                animal_extra_image = image_form.cleaned_data.get(
+                    'animal_image')
                 if animal_extra_image:
                     AnimalImage.objects.create(
                         animal=animal,
@@ -236,7 +251,8 @@ class ONGEditAnimalView(PermissionRequiredMixin, LoginRequiredMixin, View):
         c_user = get_user_index(request.user)
         self.context['c_user'] = c_user
         animal = get_object_or_404(Animal, pk=pk)
-        self.context['admission_date'] = animal.admission_date.strftime("%Y-%m-%d")
+        self.context['admission_date'] = animal.admission_date.strftime(
+            "%Y-%m-%d")
         self.context['selected_animal'] = animal
         self.context['images'] = AnimalImage.objects.filter(animal=animal)
         self.context['adoptions_days'] = (
@@ -245,7 +261,7 @@ class ONGEditAnimalView(PermissionRequiredMixin, LoginRequiredMixin, View):
 
 
 class ONGEUpdateAnimalView(PermissionRequiredMixin, LoginRequiredMixin,
-                                 View):
+                           View):
     permission_required = 'ong.ong_user_access'
     template_name = 'edit_animal.html'
     context = {'animals': AnimalType.objects.all()}
@@ -261,8 +277,9 @@ class ONGEUpdateAnimalView(PermissionRequiredMixin, LoginRequiredMixin,
         animal.color = request.POST.get('color')
         animal.description = request.POST.get('description')
         if request.POST.get('animal_type') != "0":
-            animal.animal_type = get_object_or_404(AnimalType, 
-                name=request.POST.get('animal_type'))
+            animal.animal_type = get_object_or_404(AnimalType,
+                                                   name=request.POST.get(
+                                                       'animal_type'))
         if request.POST.get('is_sterilized') != "0":
             animal.is_sterilized = request.POST.get('is_sterilized')
             if animal.is_sterilized:
@@ -279,7 +296,7 @@ class ONGEUpdateAnimalView(PermissionRequiredMixin, LoginRequiredMixin,
 
 
 class ONGAnimalView(PermissionRequiredMixin, LoginRequiredMixin,
-                                 View):
+                    View):
     permission_required = 'ong.ong_user_access'
     template_name = 'view_animal_ong.html'
     context = {'animals': AnimalType.objects.all()}
@@ -292,6 +309,5 @@ class ONGAnimalView(PermissionRequiredMixin, LoginRequiredMixin,
         self.context['images'] = AnimalImage.objects.filter(animal=animal)
         self.context['adoptions_days'] = (
             timezone.now().date() - animal.admission_date).days
-        
-        return render(request, self.template_name, context=self.context)
 
+        return render(request, self.template_name, context=self.context)

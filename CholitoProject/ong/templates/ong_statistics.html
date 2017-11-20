@@ -1,0 +1,34 @@
+{% extends "Ong/ong-standard.html" %}
+{% block title %}Estadísticas de {{ ong.name }}{% endblock %}
+{% block content-header %}Estadísticas de {{ ong.name }}{% endblock %}
+
+{% block content %}
+
+        <script src="http://d3plus.org/js/d3.js"></script>
+    <script src="http://d3plus.org/js/d3plus.js"></script>
+
+    <div id="viz"></div>
+    <script>
+        var datas = [
+            {% for stat in data%}
+                {"Mes": "{{ stat.0 }}", "Dato": "{{ stat.1 }}", "Cantidad": {{ stat.2 }}, "pos": {{ stat.3 }} },
+            {% endfor %}
+        ];
+        var visualization = d3plus.viz()
+            .container("#viz")
+            .data(datas)
+            .type("bar")
+            .id("Dato")
+            .x("Mes")
+            .y("Cantidad")
+            .order({
+                "sort": "asc",
+                "value": "pos"
+            })
+            .draw()
+    </script>
+    <h4>Total de animales acogidos: {{ admitted }}</h4>
+    <h4>Total de animales adoptados: {{ adopted }}</h4>
+    <h4>Total de animales esterilizados: {{ sterilized }}</h4>
+
+{% endblock %}

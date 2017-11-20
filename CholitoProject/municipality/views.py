@@ -1,9 +1,11 @@
+from django.contrib.auth.mixins import PermissionRequiredMixin, \
+    LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.views import View
-from django.contrib.auth.mixins import PermissionRequiredMixin,\
-    LoginRequiredMixin
-from complaint.models import Complaint
+
 from CholitoProject.userManager import get_user_index
+from complaint.models import Complaint
+from ong.models import ONG
 
 
 class IndexView(PermissionRequiredMixin, LoginRequiredMixin, View):
@@ -54,3 +56,16 @@ class UserDetail(PermissionRequiredMixin, LoginRequiredMixin, View):
             c_user.municipality.avatar = request.FILES['avatar']
             c_user.municipality.save()
         return redirect('/')
+
+
+class ShowOngView(PermissionRequiredMixin, LoginRequiredMixin, View):
+    permission_required = 'municipality.municipality_user_access'
+    template_name = 'muni_show_ong.html'
+    context = {}
+
+    def get(self, request, **kwargs):
+        user = get_user_index(request.user)
+        self.context['c_user'] = user
+        ong = ONG.objects.all()
+        self.context['all_ong'] = ong
+        return render(request, self.template_name, context=self.context)

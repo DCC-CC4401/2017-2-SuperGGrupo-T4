@@ -49,7 +49,11 @@ class LogInView(TemplateView):
     context = {'animals': animals}
 
     def get(self, request, **kwargs):
-        return render(request, self.template_name, context=self.context)
+        c_user = get_user_index(request.user)
+        if c_user is None:
+            return render(request, self.template_name, context=self.context)
+        return redirect('user-index')
+
 
 
 class SignUpView(View):

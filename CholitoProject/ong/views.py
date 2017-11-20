@@ -83,7 +83,7 @@ class ONGDispatcherView(View):
             return render(request, 'municipality_user_ong.html',
                           context=self.context)
 
-        return render(request, 'index.html', context=self.context)
+        return redirect('user-index')
 
 
 class ONGIndexView(PermissionRequiredMixin, LoginRequiredMixin, View):

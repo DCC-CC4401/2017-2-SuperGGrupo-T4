@@ -32,8 +32,5 @@ class AdoptView(View):
     def get(self, request, **kwargs):
         c_user = get_user_index(request.user)
         animal = get_object_or_404(Animal, pk=request.GET.get('id'))
-        animal.adoption_state = 2
-        animal.save()
-
         Adopt.objects.get_or_create(user=c_user, animal=animal)
         return HttpResponse("")

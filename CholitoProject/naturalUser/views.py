@@ -19,11 +19,23 @@ class IndexView(TemplateView):
     context = {}
 
     def get(self, request, **kwargs):
+
+        ongs = ONG.objects.all()
+
+        if "animaltype" in request.GET:
+            animal_type = int(request.GET["animaltype"])
+            ongs = ongs.filter(animal__animal_type=animal_type)
+
+        if "age" in request.GET:
+            age_gt, age_lt =  tuple(request.GET["age"].split("-"))
+            ongs = ongs.filter(animal__estimated_age__lte=age_lt, animal__estimated_age__gte=age_gt)
+
+
         c_user = get_user_index(request.user)
         self.context['c_user'] = c_user
         animals = AnimalType.objects.all()
         self.context['animals'] = animals
-        ongs = ONG.objects.all()
+
         self.context['ongs'] = ongs
         if c_user is None:
             return render(request, 'index.html', context=self.context)

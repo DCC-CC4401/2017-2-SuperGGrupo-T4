@@ -1,6 +1,76 @@
 {% extends "main-user.html" %}
 
 {% block sidebar %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            var current_url = document.location.href;
+
+            
+            document.getElementById("animal_type_checkbox").checked = (current_url.indexOf("animaltype") !== -1) ? true : false;
+            
+
+            
+            document.getElementById("animal_age_checkbox").checked = (current_url.indexOf("age") !== -1) ? true : false;
+            
+
+
+
+        function removeUrlParameter(url, parameter) {
+  var urlParts = url.split('?');
+
+  if (urlParts.length >= 2) {
+    // Get first part, and remove from array
+    var urlBase = urlParts.shift();
+
+    // Join it back up
+    var queryString = urlParts.join('?');
+
+    var prefix = encodeURIComponent(parameter) + '=';
+    var parts = queryString.split(/[&;]/g);
+
+    // Reverse iteration as may be destructive
+    for (var i = parts.length; i-- > 0; ) {
+      // Idiom for string.startsWith
+      if (parts[i].lastIndexOf(prefix, 0) !== -1) {
+        parts.splice(i, 1);
+      }
+    }
+
+    url = urlBase + '?' + parts.join('&');
+  }
+
+  return url;
+}
+    $("#animal_type_checkbox").click(function() {
+        // this function will get executed every time the #home element is clicked (or tab-spacebar changed)
+        console.log("holitas");
+        var animal_dropdown = document.getElementById("animal_drodown");
+        if($(this).is(":checked")) {
+            var animal_type = animal_dropdown.options[animal_dropdown.selectedIndex].value;
+            var new_url = document.location.href;
+            document.location = (new_url.indexOf("?") !== -1) ?new_url+"&animaltype=" +animal_type : new_url+"?animaltype=" +animal_type;
+        }
+        else{
+            document.location = removeUrlParameter(document.location.href, "animaltype");
+        }
+});
+
+    $("#animal_age_checkbox").click(function() {
+        // this function will get executed every time the #home element is clicked (or tab-spacebar changed)
+        var animal_dropdown = document.getElementById("animal_age_drodown");
+        if($(this).is(":checked")) {
+            
+            var value = animal_dropdown.options[animal_dropdown.selectedIndex].text;
+            var new_url = document.location.href;
+            document.location = (new_url.indexOf("?") !== -1) ?new_url+"&age=" +value : new_url+"?age=" +value;
+        }
+        else{
+            document.location = removeUrlParameter(document.location.href, "age");
+        }
+});
+        });
+    </script>
     <!-- Left side column. contains the logo and sidebar -->
     <aside class="main-sidebar">
         <!-- sidebar: style can be found in sidebar.less -->
@@ -30,23 +100,23 @@
                     <ul class="treeview-menu c-filtro-adoptar">
                         <div class="checkbox">
                             <label>
-                                <input type="checkbox"> Tipo
+                                <input id="animal_type_checkbox" type="checkbox"> Tipo
                             </label>
                         </div>
                         <div class="form-group">
-                            <select class="form-control">
+                            <select class="form-control" id="animal_drodown">
                                 {% for animal in animals %}
-                                    <option>{{ animal }}</option>
+                                    <option value="{{ animal.pk }}">{{ animal }}</option>
                                 {% endfor %}
                             </select>
                         </div>
                         <div class="checkbox">
                             <label>
-                                <input type="checkbox"> Edad
+                                <input id="animal_age_checkbox" type="checkbox"> Edad
                             </label>
                         </div>
                         <div class="form-group">
-                            <select class="form-control">
+                            <select class="form-control" id="animal_age_drodown">
                                 <option>0-1</option>
                                 <option>2-4</option>
                                 <option>4-10</option>

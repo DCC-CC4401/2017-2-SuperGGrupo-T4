@@ -25,8 +25,8 @@ class NaturalUser(models.Model):
         return "Natural user " + self.user.username
 
     def get_index(self, request, context=None):
-        liked = ONG.objects.filter(onglike__natural_user=self)
-        not_liked = ONG.objects.exclude(pk__in=liked.values_list('pk', flat=True))
+        liked = context['ongs'].filter(onglike__natural_user=self)
+        not_liked = context['ongs'].exclude(pk__in=liked.values_list('pk', flat=True))
         context['liked_ongs'] = liked
         context['ongs'] = not_liked
         print([ong.name for ong in liked])

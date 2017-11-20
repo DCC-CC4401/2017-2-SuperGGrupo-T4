@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import PermissionRequiredMixin, \
     LoginRequiredMixin
-from django.db.models import Count
+from django.db.models import Count, Case, When, IntegerField
 from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import TemplateView
@@ -108,8 +108,12 @@ class ONGListView(View):
         self.context['c_user'] = c_user
         animals = AnimalType.objects.all()
         self.context['animals'] = animals
-        ong = ONG.objects.filter(animal__adoption_state=1).annotate(
-            animals=Count('animal'))
+        ong = ONG.objects.annotate(animals=Count(
+            Case(
+                When(animal__adoption_state=1, then=1),
+                output_field=IntegerField()
+            )
+        ))
         self.context['all_ong'] = ong
         return render(request, self.template_name, context=self.context)
 

@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import PermissionRequiredMixin, \
     LoginRequiredMixin
-from django.db.models import Count
+from django.db.models import Count, Case, When, IntegerField
 from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import TemplateView
@@ -27,9 +27,9 @@ class IndexView(TemplateView):
             ongs = ongs.filter(animal__animal_type=animal_type)
 
         if "age" in request.GET:
-            age_gt, age_lt =  tuple(request.GET["age"].split("-"))
-            ongs = ongs.filter(animal__estimated_age__lte=age_lt, animal__estimated_age__gte=age_gt)
-
+            age_gt, age_lt = tuple(request.GET["age"].split("-"))
+            ongs = ongs.filter(animal__estimated_age__lte=age_lt,
+                               animal__estimated_age__gte=age_gt)
 
         c_user = get_user_index(request.user)
         self.context['c_user'] = c_user
@@ -38,6 +38,7 @@ class IndexView(TemplateView):
 
         self.context['ongs'] = ongs
         if c_user is None:
+            self.context['liked_ongs'] = None
             return render(request, 'index.html', context=self.context)
         return c_user.get_index(request, context=self.context)
 
@@ -48,7 +49,11 @@ class LogInView(TemplateView):
     context = {'animals': animals}
 
     def get(self, request, **kwargs):
-        return render(request, self.template_name, context=self.context)
+        c_user = get_user_index(request.user)
+        if c_user is None:
+            return render(request, self.template_name, context=self.context)
+        return redirect('user-index')
+
 
 
 class SignUpView(View):
@@ -107,7 +112,12 @@ class ONGListView(View):
         self.context['c_user'] = c_user
         animals = AnimalType.objects.all()
         self.context['animals'] = animals
-        ong = ONG.objects.filter(animal__adoption_state=1).annotate(animals=Count('animal'))
+        ong = ONG.objects.annotate(animals=Count(
+            Case(
+                When(animal__adoption_state=1, then=1),
+                output_field=IntegerField()
+            )
+        ))
         self.context['all_ong'] = ong
         return render(request, self.template_name, context=self.context)
 

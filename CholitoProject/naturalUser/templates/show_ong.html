@@ -1,0 +1,35 @@
+{% extends "User/user-standard.html" %}
+
+{% block title %}Adopta!{% endblock %}
+
+{% block content-header %}ONG donde puedes adoptar animales!{% endblock %}
+
+{% block content %}
+    <div class="row">
+        {% for ong in all_ong %}
+            <div class="col-lg-4 col-sm-6">
+                <div class="box box-widget widget-user">
+                    <div class="widget-user-header bg-purple-active">
+                        <h3 class="widget-user-username">{{ ong.name }}</h3>
+                        <h5 class="widget-user-desc">
+                            <i class="fa fa-star c-star"></i>
+                            {{ ong.favourites }}
+                        </h5>
+                        <h5 class="widget-user-desc">
+                            {{ ong.animals }} animales en adopción
+                        </h5>
+                    </div>
+                    <div class="widget-user-image">
+                        <img class="img-circle" src="{{ ong.avatar.url }}" alt="User Avatar">
+                    </div>
+                    <div class="c-box__footer">
+                        <a href="{% url 'see-natural-ong' ong.id %}" type="button" class="btn btn-primary">
+                            <i class="fa fa-paw"></i>
+                            Ver ONG
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

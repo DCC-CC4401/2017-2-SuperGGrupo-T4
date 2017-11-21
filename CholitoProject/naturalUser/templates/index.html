@@ -6,83 +6,83 @@
 {% block content-header %}Adoptar{% endblock %}
 
 {% block content %}
+    <script>
+        function initMap() {
 
-        {% if user.is_authenticated %}
-            <img src="{% static 'images/fav.jpg' %}" usemap="#image-map"/>
-            <map name="image-map">
-                <area target="" alt="ong" title="ong" href="{% url 'user-ong-in' %}" coords="644,317,545,198"
-                      shape="rect">
-                <area target="" alt="ong" title="ong" href="{% url 'user-ong-in' %}" coords="693,129,828,252"
-                      shape="rect">
-                <area target="" alt="ong" title="ong" href="{% url 'user-ong-in' %}" coords="469,502,602,612"
-                      shape="rect">
-            </map>
-        {% else %}
-            <img src="{% static 'images/noFav.jpg' %}" usemap="#image-map"/>
+            var stgo = {lat: -33.4575106, lng: -70.6621742};
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 10,
+                center: stgo
+            });
+            var userPositionMarker = new google.maps.Marker({map: map, icon: "{% static 'images/location.png' %}"});
+            var infowindow = new google.maps.InfoWindow({content: "Tu Posición"});
 
-            <map name="image-map">
-                <area target="" alt="ong" title="ong" href="{% url 'user-ong-out' %}" coords="830,258,696,117"
-                      shape="rect">
-                <area target="" alt="ong" title="ong" href="{% url 'user-ong-out' %}" coords="551,204,643,307"
-                      shape="rect">
-                <area target="" alt="ong" title="ong" href="{% url 'user-ong-out' %}" coords="469,505,604,614"
-                      shape="rect">
-            </map>
-        {% endif %}
+            getUserLocation(userPositionMarker, map);
+
+            {% for ong in ongs %}
+                addMarker(map, {{ ong.lat }}, {{ ong.lng }}, "{{ ong.name }}", "{% url 'see-natural-ong' pk=ong.pk %}");
+            {% endfor %}
+            {% for ong in liked_ongs %}
+                addCustomMarker(map, {{ ong.lat }}, {{ ong.lng }}, "{{ ong.name }}", "{% url 'see-natural-ong' pk=ong.pk %}");
+            {% endfor %}
+
+            alert(ong_markers)
+        }
+
+        function addMarker(map, lat, lng, title, url) {
+            var pos = {lat: lat, lng: lng};
+            var marker = new google.maps.Marker({map: map, position: pos});
+            var infowindow = new google.maps.InfoWindow({content: title});
+            infowindow.open(map, marker);
+            marker.addListener('click', function () {
+                window.location.href = url;
+            });
+        }
+
+        function addCustomMarker(map, lat, lng, title, url) {
+            var pos = {lat: lat, lng: lng};
+            var marker = new google.maps.Marker({map: map, position: pos, icon: "{% static 'images/star.png' %}"});
+            var infowindow = new google.maps.InfoWindow({content: title});
+            infowindow.open(map, marker);
+            marker.addListener('click', function () {
+                window.location.href = url;
+            });
+        }
+
+        function getUserLocation(marker, map) {
+            // Try HTML5 geolocation.
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var pos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    marker.setPosition(pos);
+                    marker.addListener('click', function () {
+                        infowindow.open(map, userPositionMarker);
+                    });
+
+                    map.setCenter(pos);
+                    map.setZoom(12);
+                }, function () {
+                    handleLocationError(true);
+                });
+            } else {
+                // Browser doesn't support Geolocation
+                handleLocationError(false);
+            }
+        }
+
+        function handleLocationError(browserHasGeolocation) {
+            console.log(browserHasGeolocation);
+            if (!browserHasGeolocation) {
+                alert("No hemos podido acceder a tu ubicación, te mostraremos información cercana a Santiago");
+            }
+        }
+    </script>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBexMfjTU6WVC7eL4q1IY0R2AsRo-938oM&callback=initMap">
+    </script>
+    <div id="map" style="height: 85%; width: 80%; position: absolute; margin: auto;"></div>
 
 {% endblock %}
-
-
-<!-- Optionally, you can add Slimscroll and FastClick plugins.
-Both of these plugins are recommended to enhance the
-user experience.
-
-<script>
-    function myMap() {
-        var mapCanvas = document.getElementById("map");
-        var myCenter = new google.maps.LatLng(-33.457394, -70.664601);
-        var centerOne = new google.maps.LatLng(-33.453291, -70.667269);
-        var centerTwo = new google.maps.LatLng(-33.455908, -70.674335);
-        var centerThree = new google.maps.LatLng(-33.466617, -70.676903);
-        var mapOptions = {center: myCenter, zoom: 15};
-        var map = new google.maps.Map(mapCanvas, mapOptions);
-        var myCity = new google.maps.Circle({
-            center: myCenter,
-            radius: 15,
-            strokeColor: "#0000FF",
-            strokeOpacity: 0.7,
-            strokeWeight: 2,
-            fillColor: "#0000FF",
-            fillOpacity: 0.4
-        });
-        var map = new google.maps.Map(mapCanvas, mapOptions);
-        myCity.setMap(map);
-        google.maps.event.addListener(map, 'click', function (event) {
-            placeMarker(map, event.latLng);
-        });
-        var infowindow = new google.maps.InfoWindow({
-            content: "ONG Favorita"
-        });
-        var markerOne = new google.maps.Marker({
-            position: centerOne,
-            icon: "favorito.png"
-        });
-        markerOne.setMap(map);
-        infowindow.open(map, markerOne);
-    }
-
-    function placeMarker(map, location) {
-        var marker = new google.maps.Marker({
-            position: location,
-            map: map
-        });
-        var infowindow = new google.maps.InfoWindow({
-            content: 'Nombre ONG'
-        });
-        infowindow.open(map, marker);
-    }
-</script>
--->
-<!-- Mapa de google
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKrwK5Ra7Lrbam0i1ifeMrlPHnN1Tctpk&callback=myMap"></script>
--->

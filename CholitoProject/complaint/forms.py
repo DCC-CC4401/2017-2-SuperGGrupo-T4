@@ -37,6 +37,6 @@ class ComplaintForm(forms.ModelForm):
 
 
 class ImageForm(forms.Form):
-    complaint_image = forms.ImageField(
+    complaint_image = forms.ImageField(required=False,
         widget=forms.FileInput(
-            attrs={'id': 'image-input', 'class': "form-control", 'placeholder': "Agrega una imagen de tu denuncia"}))
+            attrs={'id': 'image-input', 'placeholder': "Agrega una imagen de tu denuncia"}))

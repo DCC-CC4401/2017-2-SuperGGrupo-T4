@@ -1,0 +1,147 @@
+{% extends "Ong/ong-standard.html" %}
+{% block title %}Editar ficha de {{ selected_animal.name }}{% endblock %}
+
+{% block content-header %}Editar ficha de {{ selected_animal.name }}{% endblock %}
+
+{% block content %}
+    <form method="POST" enctype="multipart/form-data" action="{% url 'update-animal' selected_animal.pk %}"> 
+    <!-- slider -->
+    <div class="row">
+        <div class="col-md-9" id="slider">
+            <!-- Top part of the slider -->
+            <div class="row">
+                <div class="col-md-3" id="carousel-bounding-box">
+                    <div id="myCarousel" class="carousel slide">
+                        <!-- Carousel items -->
+                        <div class="carousel-inner">
+
+                            <div class="item" id="slide0" data-slide-number="0">
+                                <img class="img-rounded img-responsive" src="{{ selected_animal.avatar.url }}">
+                                Editar Avatar
+
+                                <input type="file" id="exampleInputFile" name="avatar">
+                            </div>
+
+                            <!--
+                            {% for image in images %}
+
+                                <div class="item" data-slide-number="{{ forloop.counter0 }}">
+                                    <img class="img-rounded img-responsive" src="{{ image.image.url }}">
+                                </div>
+
+                            {% endfor %}
+                            -->
+
+                        </div><!--/carousel-inner-->
+                    </div><!--/carousel-->
+                    <ul class="carousel-controls-mini list-inline text-center">
+                        <li><a href="#myCarousel" data-slide="prev">‹</a></li>
+                        <li><a href="#myCarousel" data-slide="next">›</a></li>
+                    </ul><!--/carousel-controls-->
+                </div><!--/col-->
+                <div class="col-md-4" id="carousel-text"></div>
+
+            </div><!--/row-->
+        </div><!--/col-->
+    </div><!--/row slider-->
+
+    <script>
+        $(document).ready(function () {
+            jQuery("#slide0").addClass("active");
+        });
+    </script>   
+
+    {% csrf_token %}
+
+    <div class="form-group">
+        <label class="control-label col-sm-10">Sexo: 
+        {{ selected_animal.get_gender_display }}  
+        </label>
+        <div class="col-sm-10">
+            <select class="btn btn-default btn-lg" id="status" name="gender">
+                <option value="0">Editar Sexo</option>
+                <option value="1">Macho</option>
+                <option value="2">Hembra</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-sm-10">Tipo de animal: 
+        {{ selected_animal.animal_type }}</label>
+            <div class="col-sm-10">
+                <select class="btn btn-default btn-lg" id="status" name="animal_type">
+                <option value = "0">Editar tipo Animal </option>
+                {% for animal in animals %} 
+                <option>{{ animal }}</option> 
+                {% endfor %}
+
+                </select>
+            </div>
+    </div> 
+    <div class="form-group">
+        <label class="control-label col-sm-10">Edad Estimada:</label>
+            <div class="col-sm-10">
+                <input type="number" name = "estimated_age" value = "{{ selected_animal.estimated_age }}"> 
+            </div>
+    </div>
+
+
+    <div class="form-group">
+        <label class="control-label col-sm-10">Fecha Ingreso:</label>
+        <div class="col-sm-10">
+            <input type="date" name = "admission_date" value = "{{ admission_date }}">
+        </div>
+    </div> 
+
+    <div class="form-group">
+        <label class="control-label col-sm-10"">Color:</label>
+        <div class="col-sm-10">
+            <input type="text" name="color" value="{{ selected_animal.color }}">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-sm-10">Descripción:</label>
+        <div class="col-sm-10">
+            <input type="text" name = "description" value="{{ selected_animal.description }}">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-sm-10">Estado Adopción:
+        {{ selected_animal.get_adoption_state_display }}
+        </label>
+        <div class="col-sm-10">
+        <select class="btn btn-default btn-lg" id="status" name="adoption_state">
+            <option value="0">Editar estado</option>
+            <option value="1">En adopción</option>
+            <option value="2">Procesando Solicitud Adopción</option>
+            <option value="3">Adoptado</option>
+        </select>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label class="control-label col-sm-10">Esterilizado:
+        {{ selected_animal.get_is_sterilized_display }}
+        </label>
+        <div class="col-sm-10">
+        <select class="btn btn-default btn-lg" id="status" name="is_sterilized">
+            <option value="0">Editar estado</option>
+            <option value="True">Esterilizado</option>
+            <option value="False">No Esterilizado</option>
+        </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+            <div class="col-sm-10">
+                <br>
+                <input type="submit" class="btn btn-primary" value="Editar Datos"/>
+            </div>
+        </div>
+    </form>
+
+{% endblock %}

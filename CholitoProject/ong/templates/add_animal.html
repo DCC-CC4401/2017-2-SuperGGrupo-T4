@@ -1,0 +1,82 @@
+{% extends "Ong/ong-standard.html" %}
+{% block title %}Crear nueva ficha de animal{% endblock %}
+
+{% block content-header %}Crear nueva ficha de animal{% endblock %}
+
+{% block content %}
+    <form method="POST" enctype="multipart/form-data" action="{% url 'create-animal' %}">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label class="control-label col-sm-10" for="name-input">Nombre</label>
+            <div class="col-sm-10">
+                {{ form.name }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-10" for="gender-input">Sexo</label>
+            <div class="col-sm-10">
+                {{ form.gender }}
+            </div>
+        </div>
+        <div class="form-check form-check-inline">
+            <label class="control-label col-sm-10" for="animal_type-input">Tipo de Animal:</label>
+            <div class="col-sm-10">
+                {{ form.animal_type }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-10" for="color-input">Color:</label>
+            <div class="col-sm-10">
+                {{ form.color }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-10" for="estimated_age-input">Edad Estimada</label>
+            <div class="col-sm-10">
+                {{ form.estimated_age }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-10" for="description-input">Descripción</label>
+            <div class="col-sm-10">
+                {{ form.description }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-10" for="admission_date-input">Fecha de ingreso a la ONG</label>
+            <div class="col-sm-10">
+                {{ form.admission_date }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-10" for="is_sterilized-input">¿Esterilizado?</label>
+            <div class="col-sm-10">
+                {{ form.is_sterilized }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-sm-10" for="avatar-input">Foto del animal:</label>
+            <div class="col-sm-10">
+                {{ form.avatar }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-10" for="image-input">Más fotos:</label>
+            <div class="col-sm-10">
+                {{ image_form.animal_image }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-10">
+                <br>
+                <input type="submit" class="btn btn-primary" value="Agregar Animal"/>
+                <input type="reset" class="btn btn-default" value="Cancelar"/>
+            </div>
+        </div>
+
+    </form>
+
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends 'User/user-standard.html' %}
+
+{% block title %}{{ ong.name }}{% endblock %}
+
+{% block content-header %}
+    <div class="row">
+        <div class="c-fundacion-title">
+            <img src="{{ ong.avatar.url }}" class="user-image" width="100">
+        </div>
+        <div class="col-xs-6">
+            <br>
+            {{ ong.name }}
+            &nbsp;<a id="like-button" href="#" data-id="{{ ong.pk }}"
+                {% if liked %}
+                     class="fa fa-star c-star liked">
+                {% else %}
+                    class="fa fa-star-o c-star--empty">
+                {% endif %}
+        </a>
+            <br>
+            <small>
+                <i class="fa fa-star c-star"></i>
+                <span id="fav-number">{{ ong.favourites }}</span>
+            </small>
+        </div>
+    </div>
+
+    {% if user.is_authenticated %}
+        <script>
+            $('#like-button').click(function () {
+                var ong_id = $(this).attr("data-id");
+                var button = document.getElementById("like-button");
+                if (!button.classList.contains('liked')) {
+                    $.get('{% url 'fav-ong' %}', {id: ong_id}, function (data) {
+                        $('#fav-number').html(data);
+                    });
+                    button.classList.remove('fa-star-o');
+                    button.classList.remove('c-star--empty');
+                    button.classList.add('fa-star');
+                    button.classList.add('c-star');
+                    button.classList.add('liked');
+                }
+            });
+        </script>
+    {% else %}
+        <script>
+            $('#like-button').click(function () {
+                alert("Tienes que estar registrado para poder seleccionar una ONG como favorita!")
+            });
+        </script>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+    {% if ong_animals %}
+        {% for animal in ong_animals %}
+            <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                <div class="info-box">
+                    <img class="info-box-icon" src="{{ animal.avatar.url }}">
+                    <div class="info-box-content">
+                                    <span class="info-box-number">
+                                        {{ animal.name }}
+                                    </span>
+                        <span class="info-box-text">{{ animal.animal_type }} | {{ animal.get_gender_display }}</span>
+                        <div class="c-info-box__btns">
+                            <div class="c-info-box__btns__one">
+                                <a href="{% url 'see-animal' animal.id %}" type="button" class="btn btn-xs btn-info">
+                                    <i class="fa fa-eye"></i>
+                                    &nbsp; Ver
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No hay animales disponibles para adoptar :(</p>
+    {% endif %}
+
+{% endblock %}

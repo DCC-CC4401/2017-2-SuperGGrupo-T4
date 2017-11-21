@@ -8,10 +8,33 @@
 
             
             document.getElementById("animal_type_checkbox").checked = (current_url.indexOf("animaltype") !== -1) ? true : false;
-            
-
-            
             document.getElementById("animal_age_checkbox").checked = (current_url.indexOf("age") !== -1) ? true : false;
+            document.getElementById("animal_drodown").selectedIndex = parseInt(getUrlParameter("animaltype"))-1;
+
+
+            document.querySelectorAll("#animal_age_drodown option").forEach( function (x) {
+                if (x.innerHTML == getUrlParameter("age")){
+                    x.selected =true;
+                    return;
+                }
+            });
+
+
+
+            function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+    }
+};
             
 
 
@@ -44,7 +67,6 @@
 }
     $("#animal_type_checkbox").click(function() {
         // this function will get executed every time the #home element is clicked (or tab-spacebar changed)
-        console.log("holitas");
         var animal_dropdown = document.getElementById("animal_drodown");
         if($(this).is(":checked")) {
             var animal_type = animal_dropdown.options[animal_dropdown.selectedIndex].value;
@@ -69,6 +91,19 @@
             document.location = removeUrlParameter(document.location.href, "age");
         }
 });
+
+    $('#animal_age_drodown').on('change', function() {
+        if (document.getElementById("animal_age_checkbox").checked){
+            document.location = document.location.href.replace(/(age=)[^\&]+/, '$1' + this.value);
+        }
+    })
+
+    $('#animal_drodown').on('change', function() {
+        if (document.getElementById("animal_type_checkbox").checked){
+            document.location = document.location.href.replace(/(animaltype=)[^\&]+/, '$1' + this.options[this.selectedIndex].value);
+        }
+    })
+
         });
     </script>
     <!-- Left side column. contains the logo and sidebar -->
